@@ -1,0 +1,2 @@
+# VB6 needs CRLF line endings: store every file exactly as-is.
+* -text
