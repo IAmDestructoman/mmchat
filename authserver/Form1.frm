@@ -32,7 +32,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub Form_Load()
-Winsock1.LocalPort 4060
+Winsock1.LocalPort = 4060
 Winsock1.Listen
 End Sub
 
@@ -42,11 +42,64 @@ Winsock1.Listen
 End Sub
 
 Private Sub Winsock1_ConnectionRequest(ByVal requestID As Long)
+Winsock1.Close
 Winsock1.Accept requestID
 End Sub
-
+Private Sub timeout(datime)
+x = Timer
+Do: DoEvents
+Loop While x + datime > Timer
+End Sub
 Private Sub Winsock1_DataArrival(ByVal bytesTotal As Long)
 Winsock1.GetData dadata, vbString
+'Version:3.4.2
+'update=http://ns3.mmchat.example.org/mmchat.exe
+'192.168.1.1 4854 Diro-Chat
+'203.0.113.10 8724 Town-100
+'203.0.113.11 9797 Town-97
+Open App.Path & "\auth.ini" For Input As 1
+dafilecon = Input(LOF(1), 1)
+Close 1
+daver = Mid(dafilecon, 1, InStr(dafilecon, vbCrLf) - 1)
+udurl = Mid(dafilecon, InStr(dafilecon, "update=") + 7, InStr(InStr(dafilecon, "update="), dafilecon, vbCrLf) - InStr(dafilecon, "update=") - 7)
+daloc = InStr(dafilecon, Winsock1.RemoteHostIP)
+If daloc = 0 Then
+    List1.AddItem Winsock1.RemoteHostIP & " UNKNOWN USER!!! " & Time & " " & Date
+    List1.ListIndex = List1.ListCount - 1
+    Winsock1.Close
+    Winsock1.Listen
+    Exit Sub
+Else
+    dainfo = Mid(dafilecon, daloc, InStr(daloc, dafilecon, vbCrLf) - daloc)
+    Dim params() As String
+    params() = Split(dainfo, " ")
+    who = params(2)
+    auth = params(1)
+End If
+If InStr(dadata, daver) = 0 Then
+    Winsock1.SendData udurl
+    timeout 2
+    List1.AddItem Winsock1.RemoteHostIP & " Old Version  " & who & " " & Time & " " & Date
+    List1.ListIndex = List1.ListCount - 1
+    Winsock1.Close
+    Winsock1.Listen
+    Exit Sub
+End If
+Dim daparams() As String
+daparams = Split(dadata, ",")
+num1 = Val(daparams(0))
+num2 = Val(daparams(1))
+List1.AddItem Winsock1.RemoteHostIP & " " & daparams(2) & " " & who & " " & Time & " " & Date
+List1.ListIndex = List1.ListCount - 1
+num1 = num1 / Val(Mid(auth, 1, 2))
+num2 = num2 / Val(Mid(auth, 3, 2))
+Winsock1.SendData Str(auth + num1 + num2)
+timeout 2
+Winsock1.Close
+Winsock1.Listen
+Exit Sub
+
+
 
 End Sub
 

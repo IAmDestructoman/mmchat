@@ -1,4 +1,3 @@
-dll intergration (darknomads.dll)
 ignore
-in depth help
-config ini
+gag
+socket nums or names
