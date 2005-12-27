@@ -4,7 +4,7 @@ Begin VB.Form MMChat
    Caption         =   "o"
    ClientHeight    =   4050
    ClientLeft      =   150
-   ClientTop       =   840
+   ClientTop       =   720
    ClientWidth     =   5295
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
@@ -310,6 +310,7 @@ Public init As Boolean
 Public sysversion As String
 Public welcome As String
 Public datime As Variant
+Public authdis As String
 
 Private Type userinfo
     name As String
@@ -657,10 +658,11 @@ Case "auth"
         Exit Sub
     End If
     If Check1.Value = 0 Then
-        chatper Index, "Auth Enabled"
-        Check1.Value = 1
+        chatper Index, "Auth is not currently on."
+        
     Else
-        chatper Index, "Auth Disabled"
+        chatall 0, "Authentication Disabled for 2 minutes by " & users(Index).name
+        authdis = 0
         Check1.Value = 0
     End If
     
@@ -1560,7 +1562,10 @@ End Sub
 
 Private Sub Timer1_Timer()
 'check pending
-MsgBox outpacks.Caption
+'MsgBox outpacks.Caption
+
+
+
 For a = 0 To pending.ListCount - 1
     datime = Mid(pending.List(a), InStr(pending.List(a), "~") + 1, Len(pending.List(a)))
     If Val(datime) < Timer - 15 Or Val(datime) > Timer Then
@@ -1574,6 +1579,18 @@ Next a
 
 mins = Mid(Time, InStr(Time, ":") + 4, 2)
 If mins = "00" Or mins = "30" Then
+
+    If authdis <> "" Then
+        authdis = authdis + 1
+        If authdis > 3 Then
+            authdis = ""
+            Check1.Value = 1
+            chatall 0, "Authenication enabled by System" & Chr(10)
+        End If
+    End If
+
+
+
     For temp = 1 To winsock.UBound
         If isloaded(winsock, temp) = True Then
             If winsock(temp).Tag = "auth" Then
@@ -1593,6 +1610,7 @@ If init = False Then
     winsock(0).CloseSocket
     Exit Sub
 End If
+
 
 a = 0
 Do
