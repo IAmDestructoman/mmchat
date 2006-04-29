@@ -1,0 +1,2 @@
+Allows users to privately chat to other users.
+/chat ServerName pmsg RemoteUser what ever you want your private chat to be

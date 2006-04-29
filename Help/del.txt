@@ -1,0 +1,2 @@
+Deletes a user account.
+/chat Servername del Username

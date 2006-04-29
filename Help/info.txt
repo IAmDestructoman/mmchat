@@ -1,0 +1,2 @@
+Shows detailed information about a user.
+/chat servername info username

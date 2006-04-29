@@ -18,6 +18,7 @@ Begin VB.Form Form1
       Width           =   9015
    End
    Begin MSWinsockLib.Winsock Winsock1 
+      Index           =   0
       Left            =   2160
       Top             =   1320
       _ExtentX        =   741
@@ -32,77 +33,90 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub Form_Load()
-Winsock1.LocalPort = 4060
-Winsock1.Listen
+Winsock1(0).LocalPort = 4060
+Winsock1(0).Listen
 End Sub
-
-Private Sub Winsock1_Close()
-Winsock1.Close
-Winsock1.Listen
+Private Sub Winsock1_Close(Index As Integer)
+On Error Resume Next
+Winsock1(Index).Close
+If Index = 0 Then
+    Winsock1(0).Listen
+Else
+    Unload Winsock1(Index)
+End If
 End Sub
-
-Private Sub Winsock1_ConnectionRequest(ByVal requestID As Long)
-Winsock1.Close
-Winsock1.Accept requestID
+Private Sub Winsock1_ConnectionRequest(Index As Integer, ByVal requestID As Long)
+num = Winsock1.UBound + 1
+Load Winsock1(num)
+Winsock1(num).Accept requestID
+DoEvents
 End Sub
 Private Sub timeout(datime)
 x = Timer
 Do: DoEvents
 Loop While x + datime > Timer
 End Sub
-Private Sub Winsock1_DataArrival(ByVal bytesTotal As Long)
-Winsock1.GetData dadata, vbString
+Private Sub Winsock1_DataArrival(Index As Integer, ByVal bytesTotal As Long)
+On Error GoTo daerror
+Winsock1(Index).GetData dadata, vbString
 'Version:3.4.2
 'update=http://ns3.mmchat.example.org/mmchat.exe
 '192.168.1.1 4854 Diro-Chat
 '203.0.113.10 8724 Town-100
 '203.0.113.11 9797 Town-97
-Open App.Path & "\auth.ini" For Input As 1
-dafilecon = Input(LOF(1), 1)
-Close 1
+dafile = FreeFile
+Open App.Path & "\auth.ini" For Input As dafile
+dafilecon = Input(LOF(dafile), dafile)
+Close dafile
 daver = Mid(dafilecon, 1, InStr(dafilecon, vbCrLf) - 1)
 udurl = Mid(dafilecon, InStr(dafilecon, "update=") + 7, InStr(InStr(dafilecon, "update="), dafilecon, vbCrLf) - InStr(dafilecon, "update=") - 7)
-daloc = InStr(dafilecon, Winsock1.RemoteHostIP)
-If daloc = 0 Then
-    List1.AddItem Winsock1.RemoteHostIP & " UNKNOWN USER!!! " & Time & " " & Date
+daloc = InStr(dafilecon, Winsock1(Index).RemoteHostIP)
+If InStr(dadata, daver) = 0 Then
+    Winsock1(Index).SendData udurl
+    timeout 2
+    List1.AddItem Winsock1(Index).RemoteHostIP & " Old Version  " & Time & " " & Date
     List1.ListIndex = List1.ListCount - 1
-    Winsock1.Close
-    Winsock1.Listen
+    Winsock1_Close (Index)
     Exit Sub
+End If
+
+If daloc = 0 Then
+    If InStr(dadata, "DEMO") Then
+        List1.AddItem Winsock1(Index).RemoteHostIP & " DEMO VERSION " & Time & " " & Date
+        Winsock1(Index).SendData "OK"
+        timeout 1
+        Winsock1_Close (Index)
+    Else
+        List1.AddItem Winsock1(Index).RemoteHostIP & " UNKNOWN USER!!! " & Time & " " & Date
+        List1.ListIndex = List1.ListCount - 1
+        Winsock1_Close (Index)
+        Exit Sub
+    End If
 Else
     dainfo = Mid(dafilecon, daloc, InStr(daloc, dafilecon, vbCrLf) - daloc)
     Dim params() As String
     params() = Split(dainfo, " ")
     who = params(2)
     auth = params(1)
-End If
-If InStr(dadata, daver) = 0 Then
-    Winsock1.SendData udurl
-    timeout 2
-    List1.AddItem Winsock1.RemoteHostIP & " Old Version  " & who & " " & Time & " " & Date
+    Dim daparams() As String
+    daparams = Split(dadata, ",")
+    num1 = Val(daparams(0))
+    num2 = Val(daparams(1))
+    List1.AddItem Winsock1(Index).RemoteHostIP & " " & daparams(2) & " " & who & " " & Time & " " & Date
     List1.ListIndex = List1.ListCount - 1
-    Winsock1.Close
-    Winsock1.Listen
-    Exit Sub
+    num1 = num1 / Val(Mid(auth, 1, 2))
+    num2 = num2 / Val(Mid(auth, 3, 2))
+    Winsock1(Index).SendData Str(auth + num1 + num2)
+    timeout 2
+    Winsock1_Close (Index)
 End If
-Dim daparams() As String
-daparams = Split(dadata, ",")
-num1 = Val(daparams(0))
-num2 = Val(daparams(1))
-List1.AddItem Winsock1.RemoteHostIP & " " & daparams(2) & " " & who & " " & Time & " " & Date
-List1.ListIndex = List1.ListCount - 1
-num1 = num1 / Val(Mid(auth, 1, 2))
-num2 = num2 / Val(Mid(auth, 3, 2))
-Winsock1.SendData Str(auth + num1 + num2)
-timeout 2
-Winsock1.Close
-Winsock1.Listen
 Exit Sub
-
-
-
+daerror:
+Winsock1_Close (Index)
+Exit Sub
 End Sub
 
-Private Sub Winsock1_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-Winsock1_Close
+
+Private Sub Winsock1_Error(Index As Integer, ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Winsock1_Close (Index)
 End Sub

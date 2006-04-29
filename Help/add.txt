@@ -1,0 +1,2 @@
+Add a user to the DataBase.
+/chat ServerName add UserName PassWord PermLvl

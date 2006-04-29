@@ -1,0 +1,16 @@
+Log shows you the chat log of the channel you are currently in.
+Plog shows you your pmsg log.
+Log and Plog also has some cool sub commands as well.
+You can grep for certian words or phrases.  
+You can also specify how many entries you would like to see (default is 20). 
+These commands may be combined as long as the number of entries is the last parameter.
+
+/chat ServerName log [grep word or phrase][number to show]  IE:
+
+/chat Servername log cpk     - This would return the last 20 chats in your current channel containing cpk in the chat
+/chat Servername log cpk 100 - Same as above except would return the last 100 chats
+/chat Servername log         - Displays last 20 chats
+/chat Servername log 100     - Displays last 100 chats
+
+Each channel can hold up to 5000 chats.
+Plog is unlimited.

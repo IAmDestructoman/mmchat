@@ -1,0 +1,2 @@
+Allows logins if Auth is disabled.
+/chat servername login password

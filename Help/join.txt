@@ -1,0 +1,4 @@
+Join a channel.  If a channel has a password you must specify it after the channel name.
+
+/chat servername join testchannel
+/chat servername join testchannel channelpassword

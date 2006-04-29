@@ -1,0 +1,2 @@
+This is an super cool feature that allows you to bypass the password by setting the server to recognize your ip address.
+/chat servername setip

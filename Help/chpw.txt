@@ -1,0 +1,2 @@
+Change password
+/chat Servername chpw newpw

@@ -1,0 +1,2 @@
+This command allows a user to force another user to join the channel they are currently in.
+/chat Servername fjoin Username

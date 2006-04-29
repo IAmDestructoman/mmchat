@@ -1,0 +1,3 @@
+Kicks a user. You can add an optional reason on the end that is displayed on the booted message.
+/chat servername kick username
+/chat servername kick username SPAMMY BASTARD!

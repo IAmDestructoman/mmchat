@@ -1,0 +1,3 @@
+This gags a user for a secified amount of time in minutes.
+/chat Servername gag username .5 - Would gag username for 30 seconds
+/chat servername gag username    - gags for 5 minutes by default

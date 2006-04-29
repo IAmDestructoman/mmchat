@@ -1,0 +1,2 @@
+Forces removal of a channel and moves everyone to channel main.
+/chat chatserv remove channelname

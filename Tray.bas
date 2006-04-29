@@ -1,4 +1,4 @@
-Attribute VB_Name = "Module1"
+Attribute VB_Name = "Systray"
 ' Create an Icon in System Tray Needs
 Public Type NOTIFYICONDATA
 cbSize As Long

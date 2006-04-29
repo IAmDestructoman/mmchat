@@ -1,0 +1,3 @@
+The who command is pretty damn self explanitory.
+Just /chat ServerName who
+It returns a list of all online users, socket number, origional chat name, and their permission level. Valid levels are 0-9.

@@ -1,0 +1,4 @@
+Create a channel.  You can restrict access to the channel with a password or a permission level.  NOTICE: if a level 4 user is in the channel and the fjoin command is issues, it will bypass the permissions of that channel!!
+/chat servername ccreate channelname
+/chat Servername ccreate channelname password
+/chat Servername ccreate channelname permlvl

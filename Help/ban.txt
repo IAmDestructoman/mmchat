@@ -1,0 +1,2 @@
+You can ban a username or an ip address from connecting to there server.
+/chat Servername ban username/ip

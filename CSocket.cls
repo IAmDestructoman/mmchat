@@ -1479,7 +1479,7 @@ Private Function RecvDataToBuffer() As Long
         '
     ElseIf lngBytesReceived = SOCKET_ERROR Then
         '
-        'Err.Raise Err.LastDllError, "CSocket.RecvToBuffer", GetErrorDescription(Err.LastDllError)
+        Err.Raise Err.LastDllError, "CSocket.RecvToBuffer", GetErrorDescription(Err.LastDllError)
         '
         RaiseEvent OnError(CInt(0), GetErrorDescription(0), 0, "", "", 0, False)
     End If
