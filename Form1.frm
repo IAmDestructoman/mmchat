@@ -23,7 +23,6 @@ Begin VB.Form Form1
       Left            =   0
       MultiLine       =   -1  'True
       TabIndex        =   2
-      Text            =   "Form1.frx":0000
       Top             =   480
       Width           =   8295
    End

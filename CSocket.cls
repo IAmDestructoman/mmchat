@@ -1503,7 +1503,7 @@ Private Function RecvData(varData As Variant, blnPeek As Boolean, Optional varTy
     'If the local buffer is empty, go away - we have nothing to do here.
     If Len(m_strRecvBuffer) = 0 Then Exit Function
     '
-    If isempty(maxLen) Then
+    If IsEmpty(maxLen) Then
         maxLen = 0
     End If
     '
@@ -1527,7 +1527,7 @@ Private Function RecvData(varData As Variant, blnPeek As Boolean, Optional varTy
         '
     End If
     '
-    If isempty(varType) Then
+    If IsEmpty(varType) Then
         varData = CStr(StrConv(arrBuffer(), vbUnicode))
     Else
         '
@@ -1760,18 +1760,3 @@ Private Sub SendBufferedData()
     '
 End Sub
 
-Public Property Get DataSource() As DataSource
-
-End Property
-
-Public Property Set DataSource(ByVal objDataSource As DataSource)
-
-End Property
-
-Public Property Get DataMember() As DataMember
-
-End Property
-
-Public Property Let DataMember(ByVal DataMember As DataMember)
-
-End Property

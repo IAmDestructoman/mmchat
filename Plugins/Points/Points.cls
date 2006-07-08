@@ -16,20 +16,10 @@ Public Function GetName() As String
     GetName = "Pts Counter Plugin  Version " & App.Major & "." & App.Minor
 End Function
 Public Function GetCommands() As String
-    GetCommands = "Wipe,3,Inc,3,Points,1,ZoneAdd,3,Zonelist,1"
+    GetCommands = ",Wipe,3,Inc,3,Points,1,ZoneAdd,3,Zonelist,1,"
 End Function
-Public Function wipe(username As String, zone As String) As String
 
+Public Function main(dadata As String) As String
+main = "testing.. data-" & dadata
 End Function
-Public Function inc(username As String, zone As String) As String
 
-End Function
-Public Function points(zone As String) As String
-
-End Function
-Public Function Zoneadd(zone As String) As String
-
-End Function
-Public Function Zonelist() As String
-
-End Function

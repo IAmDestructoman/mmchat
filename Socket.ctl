@@ -50,13 +50,13 @@ Public Property Get BytesReceived() As Long
     BytesReceived = CSck.BytesReceived
 End Property
 
-Public Property Get Protocol() As ProtocolConstants
-    Protocol = CSck.Protocol
-End Property
+'Public Property Get Protocol() As ProtocolConstants
+'    Protocol = CSck.Protocol
+'End Property
 
-Public Property Let Protocol(NewValue As ProtocolConstants)
-    CSck.Protocol = NewValue
-End Property
+'Public Property Let Protocol(NewValue As ProtocolConstants)
+'    CSck.Protocol = NewValue
+'End Property
 
 Public Property Get RemoteHostIP() As String
     RemoteHostIP = CSck.RemoteHostIP
@@ -70,7 +70,7 @@ Public Property Let RemoteHost(NewValue As String)
     CSck.RemoteHost = newval
 End Property
 
-Public Property Get State() As StateConstants
+Public Property Get State() As Integer
     State = CSck.State
 End Property
 
