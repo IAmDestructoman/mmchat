@@ -1,14 +1,22 @@
 VERSION 5.00
 Begin VB.Form Form1 
    Caption         =   "Form1"
-   ClientHeight    =   3375
+   ClientHeight    =   4980
    ClientLeft      =   60
    ClientTop       =   345
-   ClientWidth     =   8295
+   ClientWidth     =   9645
    LinkTopic       =   "Form1"
-   ScaleHeight     =   3375
-   ScaleWidth      =   8295
+   ScaleHeight     =   4980
+   ScaleWidth      =   9645
    StartUpPosition =   3  'Windows Default
+   Begin VB.CommandButton Command2 
+      Caption         =   "Help"
+      Height          =   375
+      Left            =   7440
+      TabIndex        =   3
+      Top             =   0
+      Width           =   975
+   End
    Begin VB.TextBox Text1 
       BeginProperty Font 
          Name            =   "Courier New"
@@ -19,20 +27,20 @@ Begin VB.Form Form1
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   2895
+      Height          =   4575
       Left            =   0
       MultiLine       =   -1  'True
       TabIndex        =   2
-      Top             =   480
-      Width           =   8295
+      Top             =   360
+      Width           =   9615
    End
    Begin VB.CommandButton Command1 
       Caption         =   "OK"
       Height          =   375
-      Left            =   6000
+      Left            =   8520
       TabIndex        =   0
       Top             =   0
-      Width           =   2295
+      Width           =   1095
    End
    Begin VB.Label Label1 
       Caption         =   "Label1"
@@ -40,7 +48,7 @@ Begin VB.Form Form1
       Left            =   0
       TabIndex        =   1
       Top             =   0
-      Width           =   5895
+      Width           =   6855
    End
 End
 Attribute VB_Name = "Form1"
@@ -50,6 +58,21 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub Command1_Click()
 Form1.Tag = "submitted"
+End Sub
+
+Private Sub Command2_Click()
+damessage = damessage & "Color codes:" & vbCrLf
+damessage = damessage & "@Bold    - Ansi Bold" & vbCrLf
+damessage = damessage & "@Reset   - Ansi Reset" & vbCrLf
+damessage = damessage & "@Black   - Ansi Black" & vbCrLf
+damessage = damessage & "@Blue    - Ansi Blue" & vbCrLf
+damessage = damessage & "@Cyan    - Ansi Cyan" & vbCrLf
+damessage = damessage & "@Green   - Ansi Green" & vbCrLf
+damessage = damessage & "@Magenta - Ansi Magenta" & vbCrLf
+damessage = damessage & "@Red     - Ansi Red" & vbCrLf
+damessage = damessage & "@Yellow  - Ansi Yellow" & vbCrLf
+damessage = damessage & "@White   - Ansi White" & vbCrLf
+MsgBox damessage, vbOKOnly, "MMchat"
 End Sub
 
 Private Sub Form_Load()

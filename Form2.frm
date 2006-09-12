@@ -37,7 +37,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private dafile
 Private Sub Form_Load()
-Socket1.Connect GetFromINI("Main", "Authserver", "ns3.mmchat.example.org", App.Path & "\mmchat.ini"), 80
+Socket1.Connect GetFromINI("Main", "Authserver", "ns1.mmchat.example.org", App.Path & "\mmchat.ini"), 80
 
 End Sub
 
@@ -49,7 +49,8 @@ Print #9, dafile;
 Close 9
 Socket1.CloseSocket
 FileCopy App.Path & "\mmchat.new.exe", App.Path & "\mmchat.prg"
- Shell App.Path & "\mmchat.new.exe"
+Shell App.Path & "\mmchat.new.exe"
+
 End
 
 End Sub

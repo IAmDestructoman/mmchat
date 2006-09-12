@@ -20,8 +20,6 @@ Public authdis As String
 Public authserv As String
 Public authnum As String
 Public gaglist(1 To 50, 1 To 2) As Variant
-
-
 Public Type userinfo
     name As String
     cip As String
@@ -40,7 +38,6 @@ Public Type userinfo
     channel As Integer
     sending As Boolean
 End Type
-
 Public Type channelinfo
     name As String
     password As String
@@ -49,8 +46,16 @@ Public Type channelinfo
     log() As String
     sil As Boolean
 End Type
-
+Public Type commandinfo
+    name As String
+    permlvl As String
+    sparams As Integer
+    nparams As Integer
+    help As String
+End Type
 Public procplugin As Boolean
 Public channels() As channelinfo
 Global users() As userinfo
 Public plugins() As Object
+Public commands(1 To 24) As commandinfo
+

@@ -1,126 +1,144 @@
 VERSION 5.00
 Begin VB.Form MMChat 
-   BorderStyle     =   3  'Fixed Dialog
    Caption         =   "o"
-   ClientHeight    =   4050
-   ClientLeft      =   150
-   ClientTop       =   720
-   ClientWidth     =   5385
+   ClientHeight    =   4815
+   ClientLeft      =   165
+   ClientTop       =   735
+   ClientWidth     =   5175
    LinkTopic       =   "Form1"
-   MaxButton       =   0   'False
-   MinButton       =   0   'False
-   ScaleHeight     =   4050
-   ScaleWidth      =   5385
-   ShowInTaskbar   =   0   'False
+   ScaleHeight     =   4815
+   ScaleWidth      =   5175
    StartUpPosition =   3  'Windows Default
+   Begin VB.ListBox replist 
+      Height          =   4740
+      Left            =   5280
+      TabIndex        =   25
+      Top             =   0
+      Width           =   3855
+   End
+   Begin VB.CheckBox Check2 
+      Caption         =   "Main rep filter"
+      Height          =   375
+      Left            =   1320
+      TabIndex        =   23
+      Top             =   4200
+      Width           =   855
+   End
    Begin VB.ListBox List4 
-      Height          =   450
-      Left            =   1560
-      TabIndex        =   26
-      Top             =   3480
-      Width           =   3735
+      Height          =   645
+      Left            =   840
+      TabIndex        =   21
+      Top             =   1920
+      Width           =   4335
    End
    Begin VB.ListBox pending 
-      Height          =   645
-      Left            =   6600
-      TabIndex        =   25
-      Top             =   2640
+      Height          =   450
+      Left            =   0
+      TabIndex        =   20
+      Top             =   4320
       Width           =   1215
    End
    Begin VB.TextBox Text6 
       Height          =   285
-      Left            =   960
-      TabIndex        =   24
-      Top             =   3720
+      Left            =   3240
+      TabIndex        =   19
+      Top             =   4440
       Width           =   495
    End
    Begin VB.TextBox Text5 
       Height          =   285
-      Left            =   960
-      TabIndex        =   23
-      Top             =   3360
+      Left            =   3240
+      TabIndex        =   18
+      Top             =   4080
       Width           =   495
    End
    Begin VB.TextBox Text4 
       Height          =   285
-      Left            =   960
-      TabIndex        =   22
-      Top             =   3000
+      Left            =   3240
+      TabIndex        =   17
+      Top             =   3720
       Width           =   495
    End
    Begin VB.CheckBox Check4 
       Caption         =   "Out"
       Height          =   255
-      Left            =   3360
-      TabIndex        =   18
-      Top             =   3240
+      Left            =   600
+      TabIndex        =   13
+      Top             =   3960
       Width           =   615
    End
    Begin VB.CheckBox Check3 
       Caption         =   "In"
       Height          =   255
-      Left            =   3360
-      TabIndex        =   17
-      Top             =   3000
+      Left            =   120
+      TabIndex        =   12
+      Top             =   3960
       Width           =   495
    End
    Begin VB.ListBox List3 
-      Enabled         =   0   'False
-      Height          =   1230
-      Left            =   3960
-      TabIndex        =   15
-      Top             =   2160
+      Height          =   1815
+      Left            =   3840
+      TabIndex        =   10
+      Top             =   2880
       Width           =   1335
    End
    Begin VB.TextBox Text3 
       Height          =   285
       Left            =   960
-      TabIndex        =   10
-      Top             =   2640
-      Width           =   1575
+      TabIndex        =   9
+      Top             =   3360
+      Width           =   1215
    End
    Begin VB.TextBox Text2 
       Height          =   285
       Left            =   960
       Locked          =   -1  'True
       TabIndex        =   6
-      Top             =   2280
-      Width           =   1575
+      Top             =   3000
+      Width           =   1215
    End
    Begin VB.ListBox List2 
       Height          =   645
-      Left            =   2640
+      Left            =   2280
       TabIndex        =   5
-      Top             =   2280
-      Width           =   1215
+      Top             =   2880
+      Width           =   1455
    End
    Begin VB.TextBox Text1 
       Height          =   285
       Left            =   960
       Locked          =   -1  'True
       TabIndex        =   2
-      Top             =   1920
-      Width           =   1575
+      Top             =   2640
+      Width           =   1215
    End
    Begin VB.ListBox List1 
       Height          =   1815
-      Left            =   120
+      Left            =   0
       TabIndex        =   0
       Top             =   0
       Width           =   5175
    End
    Begin VB.Timer Timer1 
       Interval        =   1000
-      Left            =   600
-      Top             =   120
+      Left            =   9600
+      Top             =   720
    End
    Begin VB.CheckBox Check1 
-      Caption         =   "Auth    Allow serves"
+      Caption         =   "Auth"
       Height          =   255
-      Left            =   1560
+      Left            =   1320
       TabIndex        =   1
-      Top             =   3000
-      Width           =   1695
+      Top             =   3720
+      Width           =   735
+   End
+   Begin VB.Label Label6 
+      Caption         =   "Allow serving:"
+      Height          =   255
+      Left            =   120
+      TabIndex        =   24
+      Top             =   3720
+      Width           =   1095
    End
    Begin ChatServer.Socket Socket1 
       Left            =   2640
@@ -134,8 +152,8 @@ Begin VB.Form MMChat
    End
    Begin ChatServer.Socket Winsock 
       Index           =   0
-      Left            =   2400
-      Top             =   1800
+      Left            =   6960
+      Top             =   4200
       _ExtentX        =   847
       _ExtentY        =   847
       LocalPort       =   0
@@ -147,106 +165,63 @@ Begin VB.Form MMChat
       Alignment       =   2  'Center
       Caption         =   "Gag point"
       Height          =   255
-      Left            =   0
-      TabIndex        =   20
-      Top             =   3360
+      Left            =   2280
+      TabIndex        =   15
+      Top             =   4080
       Width           =   975
    End
    Begin VB.Label Label12 
       Alignment       =   2  'Center
       Caption         =   "Gag Time"
       Height          =   255
-      Left            =   0
-      TabIndex        =   21
-      Top             =   3720
+      Left            =   2280
+      TabIndex        =   16
+      Top             =   4440
       Width           =   975
    End
    Begin VB.Label Label10 
       Alignment       =   2  'Center
       Caption         =   "Gag Interval"
       Height          =   255
-      Left            =   0
-      TabIndex        =   19
-      Top             =   3000
+      Left            =   2280
+      TabIndex        =   14
+      Top             =   3720
       Width           =   975
    End
    Begin VB.Label Label4 
       Alignment       =   2  'Center
       Caption         =   "Online"
       Height          =   255
-      Left            =   3960
-      TabIndex        =   16
-      Top             =   1920
-      Width           =   1215
-   End
-   Begin VB.Label inpacks 
-      Caption         =   "0"
-      Height          =   255
-      Left            =   7320
-      TabIndex        =   14
-      Top             =   2040
-      Width           =   975
-   End
-   Begin VB.Label Label9 
-      Alignment       =   2  'Center
-      Caption         =   "In:"
-      Height          =   255
-      Left            =   6960
-      TabIndex        =   13
-      Top             =   2040
-      Width           =   375
-   End
-   Begin VB.Label Label8 
-      Alignment       =   2  'Center
-      Caption         =   "Out:"
-      Height          =   255
-      Left            =   7080
-      TabIndex        =   12
-      Top             =   1800
-      Width           =   375
-   End
-   Begin VB.Label Label7 
-      Alignment       =   2  'Center
-      Caption         =   "Packets"
-      Height          =   255
-      Left            =   6840
+      Left            =   3840
       TabIndex        =   11
-      Top             =   1560
-      Width           =   1215
+      Top             =   2640
+      Width           =   1335
    End
    Begin VB.Label Label5 
       Alignment       =   2  'Center
       Caption         =   "Main PW:"
       Height          =   255
-      Left            =   120
-      TabIndex        =   9
-      Top             =   2640
-      Width           =   855
-   End
-   Begin VB.Label outpacks 
-      Caption         =   "0"
-      Height          =   255
-      Left            =   7320
+      Left            =   0
       TabIndex        =   8
-      Top             =   1800
-      Width           =   975
+      Top             =   3360
+      Width           =   855
    End
    Begin VB.Label Label3 
       Alignment       =   2  'Center
       Caption         =   "Port:"
       Height          =   255
-      Left            =   120
+      Left            =   0
       TabIndex        =   7
-      Top             =   2280
+      Top             =   3000
       Width           =   855
    End
    Begin VB.Label Label2 
       Alignment       =   2  'Center
       Caption         =   "Banned"
       Height          =   255
-      Left            =   2640
+      Left            =   2400
       TabIndex        =   4
-      Top             =   1920
+      Top             =   2640
       Width           =   1215
    End
    Begin VB.Label Label1 
@@ -255,22 +230,25 @@ Begin VB.Form MMChat
       Height          =   255
       Left            =   120
       TabIndex        =   3
-      Top             =   1920
+      Top             =   2640
       Width           =   855
    End
    Begin VB.Label Label13 
       Alignment       =   2  'Center
       Caption         =   "Plugins"
       Height          =   255
-      Left            =   1560
-      TabIndex        =   27
-      Top             =   3240
-      Width           =   1215
+      Left            =   0
+      TabIndex        =   22
+      Top             =   1920
+      Width           =   855
    End
    Begin VB.Menu filemenu 
       Caption         =   "File"
       Begin VB.Menu fadduser 
          Caption         =   "Add User"
+      End
+      Begin VB.Menu rreps 
+         Caption         =   "Reload Reps"
       End
       Begin VB.Menu fsetup 
          Caption         =   "Setup"
@@ -280,6 +258,15 @@ Begin VB.Form MMChat
       End
       Begin VB.Menu fileExit 
          Caption         =   "Exit"
+      End
+   End
+   Begin VB.Menu fplugins 
+      Caption         =   "Plugins"
+      Begin VB.Menu funloadplugins 
+         Caption         =   "Unload all"
+      End
+      Begin VB.Menu floadplugins 
+         Caption         =   "Load all"
       End
    End
    Begin VB.Menu filhelp 
@@ -308,19 +295,14 @@ Const ping = &H1A
 Const pong = &H1B
 Const creq = &H2
 Const peek = 28
-
-
 Public Sub LoadPlugin(strFileName)
     ReDim Preserve plugins(UBound(plugins) + 1)
     Set plugins(UBound(plugins)) = CreateObject(MakeObjectFromPath(strFileName))
-    List4.AddItem plugins(UBound(plugins)).getname
+     List4.AddItem plugins(UBound(plugins)).getname
     'MsgBox plugins(UBound(plugins)).getname
 End Sub
-
-
 Public Sub FindPlugIns(ByVal PlugInPath As String)
     Dim strFileName As String
-
     strFileName = Dir(PlugInPath & "\*.dll", vbNormal)
     Do While strFileName <> ""
         If PlugInExists(strFileName) Then
@@ -390,6 +372,8 @@ For a = 1 To UBound(users)
 Next a
 End Sub
 
+
+
 Private Sub fadduser_Click()
 Dim dauser As String
 Dim dapass As String
@@ -420,6 +404,19 @@ AddToINI "Main", "pass", dapass, App.Path & "\users\" & dauser & ".usr"
 AddToINI "Main", "perm", daperm, App.Path & "\users\" & dauser & ".usr"
 End Sub
 
+Private Sub floadplugins_Click()
+Call funloadplugins_Click
+FindPlugIns (App.Path & "\plugins")
+End Sub
+
+
+Private Sub funloadplugins_Click()
+List4.Clear
+For temp = 1 To (UBound(plugins))
+Set plugins(temp) = Nothing
+Next temp
+ReDim plugins(0)
+End Sub
 Private Sub fsave_Click()
 savetoini
 End Sub
@@ -499,11 +496,27 @@ AddToINI "Main", "Mainpw", Text3, App.Path & "\mmchat.ini"
 AddToINI "Main", "gagi", Text4, App.Path & "\mmchat.ini"
 AddToINI "Main", "gagp", Text5, App.Path & "\mmchat.ini"
 AddToINI "Main", "gagt", Text6, App.Path & "\mmchat.ini"
+AddToINI "Main", "spamon", Check2.Value, App.Path & "\mmchat.ini"
+
+
+
 End Sub
 
 
 
-Private Sub Label6_Click()
+Private Sub rreps_Click()
+replist.Clear
+If Dir(App.Path & "\replist.txt", vbNormal) = "" Then
+Open App.Path & "\replist.txt" For Output As 4
+Close 4
+End If
+Dim reps() As String
+Open App.Path & "\replist.txt" For Input As 4
+reps = Split(Input(LOF(4), 4), vbCrLf)
+Close 4
+For temp = 0 To UBound(reps)
+If reps(temp) <> "" Then replist.AddItem reps(temp)
+Next temp
 
 End Sub
 
@@ -546,6 +559,10 @@ List1.RemoveItem 0
 Loop
 If Mid(dadata, 1, 1) = Chr(19) And Mid(dadata, Len(dadata), 1) = Chr(255) Then
     users(Index).ver = Mid(dadata, 2, Len(dadata) - 2)
+    Exit Sub
+End If
+If Asc(Mid(dadata, 1, 1)) = namechange Then
+    GoTo errored
     Exit Sub
 End If
 Select Case Winsock(Index).Tag
@@ -840,12 +857,28 @@ dadata = stripansi(dadata)
 Dim params() As String
 params() = Split(dadata, " ")
 dacommand = LCase(params(0))
+For temp = 1 To UBound(commands)
+    If dacommand = LCase(commands(temp).name) Then
+        If users(Index).perm < commands(temp).permlvl Then
+            chatper Index, "this command requires level " & commands(temp).permlvl & " permissions."
+            Exit Sub
+        End If
+        If commands(temp).sparams = 1 Then
+            If UBound(params) < commands(temp).nparams Then
+                chatper Index, "Invalid params"
+                Exit Sub
+            End If
+        End If
+        If commands(temp).sparams = 2 Then
+            If UBound(params) <> commands(temp).nparams Then
+                chatper Index, "Invalid params"
+                Exit Sub
+            End If
+        End If
+    End If
+Next temp
 Select Case dacommand
 Case "auth"
-    If users(Index).perm < 3 Then
-        chatper Index, "this command requires level 3 permission level" & Chr(10)
-        Exit Sub
-    End If
     If Check1.Value = 0 Then
         chatper Index, "Auth is not currently on."
         
@@ -854,16 +887,8 @@ Case "auth"
         authdis = 0
         Check1.Value = 0
     End If
-    
 Case "add"
-    If users(Index).perm < 4 Then
-        chatper Index, "this command requires level 4 permission level" & Chr(10)
-        Exit Sub
-    End If
-    If UBound(params) <> 3 Then
-        chatper Index, "Invalid parameters" & Chr(10)
-        Exit Sub
-    End If
+
     Dim user2 As String
     Dim pass2 As String
     Dim perm2 As String
@@ -871,7 +896,7 @@ Case "add"
     pass2 = params(2)
     perm2 = params(3)
     
-    If perm > users(Index).perm Then
+    If perm2 > users(Index).perm Then
         chatper Index, "You can not create a user of higher level than yourself" & Chr(10)
         Exit Sub
     End If
@@ -886,15 +911,6 @@ Case "add"
     
     chatper Index, "Created Sucessfully:" & Chr(10) & "User: " & user2 & Chr(10) & "Pass: " & pass2 & Chr(10) & "Perm: " & perm2 & Chr(10)
 Case "kick"
-    If users(Index).perm < 4 Then
-        chatper Index, "This command requires level 4 permission level"
-        Exit Sub
-    End If
-    If UBound(params) < 1 Then
-        chatper Index, "Invalid parameters" & Chr(10)
-        Exit Sub
-    End If
-    
     destusr = params(1)
     If UBound(params) > 1 Then
         For pos = 2 To UBound(params)
@@ -925,15 +941,6 @@ Case "kick"
         
 Case "del"
     'delete user
-    
-    If users(Index).perm < 4 Then
-        chatper Index, "this command requires level 4 permission level" & Chr(10)
-        Exit Sub
-    End If
-    If UBound(params) <> 1 Then
-        chatper Index, "Invalid parameters" & Chr(10)
-        Exit Sub
-    End If
     If Dir(App.Path & "\users\" & params(1) & ".usr", vbNormal) <> "" Then
         Kill App.Path & "\users\" & params(1) & ".usr"
         chatper Index, "Account DELETED!"
@@ -944,10 +951,6 @@ Case "del"
 Case "login"
     If users(Index).perm > 0 Then
         chatper Index, "Your logged in already stupid" & Chr(10)
-        Exit Sub
-    End If
-    If UBound(params) < 1 Then
-        chatper Index, "missing params" & Chr(10)
         Exit Sub
     End If
     pass = params(1)
@@ -975,10 +978,6 @@ Case "channels"
     chatper Index, tts
 
 Case "join"
-    If UBound(params) < 1 Then
-        chatper Index, "Invalid parameters" & Chr(10)
-        Exit Sub
-    End If
     'check for auth here
     For a = 0 To UBound(channels)
         If LCase(channels(a).name) = LCase(params(1)) Then
@@ -1015,10 +1014,6 @@ Case "join"
     
 Case "ccreate"
 
-    If UBound(params) < 1 Then
-        chatper Index, "Invalid parameters" & Chr(10)
-        Exit Sub
-    End If
     If Len(params(1)) > 9 Then
         chatper Index, "Too many characters" & Chr(10)
         Exit Sub
@@ -1070,14 +1065,6 @@ Case "ccreate"
     chatall 0, "Channel [" & params(1) & "] has been created by [" & users(Index).name & "]" & Chr(10)
     cjoin params(1), Index
 Case "info"
-    If users(Index).perm < 1 Then
-        chatper Index, "This command requires level 1 permission level"
-        Exit Sub
-    End If
-    If UBound(params) < 1 Then
-        chatper Index, "Invalid parameters" & Chr(10)
-        Exit Sub
-    End If
     destusr = params(1)
     destsck = findsck(destusr)
     If destsck > 0 Then
@@ -1100,25 +1087,18 @@ Case "info"
     Exit Sub
         
 Case "chpw"
-    If users(Index).perm < 1 Then
-        chatper Index, "Your not logged in"
-        Exit Sub
-    End If
-    If UBound(params) <> 1 Then
-        chatper Index, "Invalid Params"
-        Exit Sub
-    End If
     AddToINI "Main", "pass", params(1), App.Path & "\users\" & users(Index).ocn & ".usr"
     chatper Index, "Password Changed."
 Case "ca"
     dacaloc = InStr(daorgdata, "'ca ")
     dachat = Mid(daorgdata, dacaloc + 4, Len(daorgdata))
-    
     cchatall Index, users(Index).name & " " & dachat
 Case "gca"
-    If users(Index).perm < 1 Then
-        chatper Index, "This command requires level 1 permission level" & Chr(10)
-        Exit Sub
+    If channels(users(Index).channel).sil = True Then
+        If users(Index).perm < 2 Then
+            chatper Index, "You can not use the Global Chat feature right now as the channel you are in is currently in silent mode."
+            Exit Sub
+        End If
     End If
     dacaloc = InStr(daorgdata, "'gca ")
     dachat = Mid(daorgdata, dacaloc + 5, Len(daorgdata))
@@ -1126,14 +1106,6 @@ Case "gca"
     chatall 0, "[GLOBAL] [" & users(Index).name & "] " & dachat
 
 Case "ban"
-    If users(Index).perm < 4 Then
-        chatper Index, "This command requires level 4 permission level"
-        Exit Sub
-    End If
-    If UBound(params) <> 1 Then
-        chatper Index, "Invalid Params"
-        Exit Sub
-    End If
     List2.AddItem params(1)
     Kill App.Path & "\banned.txt"
     dafilecon = ""
@@ -1149,15 +1121,7 @@ Case "ban"
     
 Case "gag"
 
-    If users(Index).perm < 4 Then
-        chatper Index, "This command requires level 4 permission level"
-        Exit Sub
-    End If
     
-    If UBound(params) < 1 Then
-        chatper Index, "Invalid params" & Chr(10)
-        Exit Sub
-    End If
     datime = 1
     destusr = params(1)
     If UBound(params) > 1 Then datime = Val(params(2))
@@ -1182,19 +1146,10 @@ Case "gag"
     Next temp
     gaglist(temp, 1) = Now + TimeSerial(0, datime, 0)
     gaglist(temp, 2) = Winsock(socknum).RemoteHostIP
-    chatall 0, Chr(10) & "*** " & users(socknum).name & " GAGGED [" & datime & " Min] by [" & users(Index).name & " ***" & Chr(10)
+    chatall 0, Chr(10) & "*** " & users(socknum).name & " GAGGED [" & datime & " Min] by [" & users(Index).name & "] ***" & Chr(10)
     users(socknum).gaggedtime = Now + TimeSerial(0, datime, 0)
 
 Case "fjoin"
-    If users(Index).perm < 4 Then
-        chatper Index, "This command requires level 4 permission level"
-        Exit Sub
-    End If
-    If UBound(params) <> 1 Then
-        chatper Index, "Invalid Params"
-        Exit Sub
-    End If
-    
     dauser = -1
     For a = 0 To UBound(users)
         If LCase(users(a).name) = LCase(params(1)) Then dauser = a
@@ -1206,10 +1161,7 @@ Case "fjoin"
     cjoin channels(users(Index).channel).name, Val(dauser)
     chatper dauser, users(Index).name & " has joined you to channel " & channels(users(dauser).channel).name & Chr(10)
 Case "silent"
-    If users(Index).perm < 3 Then
-        chatper Index, "This command requires level 3 permission level"
-        Exit Sub
-    End If
+
     If channels(users(Index).channel).sil = True Then
         channels(users(Index).channel).sil = False
         chatall 0, "Silent mode DISABLED for channel " & channels(users(Index).channel).name & " by " & users(Index).name & Chr(10)
@@ -1219,14 +1171,7 @@ Case "silent"
     End If
     
 Case "remove"
-    If users(Index).perm < 3 Then
-        chatper Index, "This command requires level 3 permission level"
-        Exit Sub
-    End If
-    If UBound(params) <> 1 Then
-        chatper Index, "Invalid Params"
-        Exit Sub
-    End If
+
     If LCase(params(1)) = "main" Then Exit Sub
     For temp = 1 To UBound(channels)
         If LCase(channels(temp).name) = LCase(params(1)) Then
@@ -1259,67 +1204,16 @@ Case "help"
         End If
         Exit Sub
     End If
-    tts = Chr(10) & "MMChat by Dirocus.  " & sysversion & Chr(10) & "Current Commands: NOTICE - help subcommands are now working!!" & Chr(10) & Chr(10)
-    If users(Index).perm > -1 Then
-        tts = tts & Chr(10)
-        tts = tts & "Level 0 Commands:" & Chr(10)
-        tts = tts & "Help      Chat Help followed by a command for more info on that command" & Chr(10)
-        tts = tts & "Login     Allows logins for auth accounts" & Chr(10)
-        tts = tts & "Channels  Shows Current loaded channels" & Chr(10)
-        tts = tts & "Join      Join a Channel" & Chr(10)
-        tts = tts & "ca        chat all, use for alias to just chat to server" & Chr(10)
-        tts = tts & "plog      View your pmsg logs since last login" & Chr(10)
-        tts = tts & "log       View your current channels log" & Chr(10)
-        tts = tts & "pmsg      Personal chat to someone" & Chr(10)
-        tts = tts & "who       List who is online" & Chr(10)
-        tts = tts & "Plugins   Lists current loaded plugins, and their commands" & Chr(10)
-        
-    End If
-    If users(Index).perm > 0 Then
-        tts = tts & Chr(10)
-        tts = tts & "Level 1 Commands:" & Chr(10)
-        tts = tts & "Ccreate   Create a channel" & Chr(10)
-        tts = tts & "Info      Get info on a user" & Chr(10)
-        
-        tts = tts & "chpw      Change your password" & Chr(10)
-        tts = tts & "setip     Enable ip Authenication" & Chr(10)
-        tts = tts & "gca       Global chatall" & Chr(10)
-        
-    End If
-    If users(Index).perm > 1 Then
-        tts = tts & Chr(10)
-        tts = tts & "Level 2 Commands:" & Chr(10)
-        
-        
-    End If
-    If users(Index).perm > 2 Then
-        tts = tts & Chr(10)
-        tts = tts & "Level 3 Commands:" & Chr(10)
-        tts = tts & "silent    Toggle silent mode for a channel" & Chr(10)
-        tts = tts & "auth      Diable requiring auth for 2 minutes" & Chr(10)
-        tts = tts & "remove    force removal of a channel" & Chr(10)
-        
-    End If
-    If users(Index).perm > 3 Then
-        tts = tts & Chr(10)
-        tts = tts & "Level 4 Commands:" & Chr(10)
-        tts = tts & "Add       Add a user into the system" & Chr(10)
-        tts = tts & "Kick      Kicks a user from the server" & Chr(10)
-        tts = tts & "Del       Deletes a user account" & Chr(10)
-        tts = tts & "Ban       Ban a users ip address" & Chr(10)
-        tts = tts & "Gag       Gag a user" & Chr(10)
-        tts = tts & "FJoin     Joins another user to a channel" & Chr(10)
-        
-    End If
-        
-    If users(Index).perm > 4 Then
-        tts = tts & Chr(10)
-        'make dubug
-        tts = tts & "Level 5 Commands:" & Chr(10)
-        
-        
-    End If
-    
+    tts = Chr(10) & "MMChat by Dirocus.  " & sysversion & Chr(10) & "Current Commands: Use help sub-command for more info" & Chr(10)
+    For temp = 0 To users(Index).perm
+        tts = tts & Chr(10) & "Level " & temp & " commands:" & Chr(10)
+        For temp2 = 1 To UBound(commands)
+            If commands(temp2).permlvl = temp Then
+                spaces = Space(10 - Len(commands(temp2).name))
+                tts = tts & commands(temp2).name & spaces & commands(temp2).help & Chr(10)
+            End If
+        Next temp2
+    Next temp
     chatper Index, tts
             
 
@@ -1491,11 +1385,11 @@ Case "plugins"
     For temp = 1 To UBound(plugins)
         tts = tts & plugins(temp).getname & Chr(10)
         tts = tts & "Command        Perm Lvl" & Chr(10)
-        Dim commads() As String
-        commands = Split(plugins(temp).getcommands, ",")
-        For temp2 = 1 To UBound(commands) - 1 Step 2
-        commands(temp2) = commands(temp2) & Space(15 - Len(commands(temp2)))
-        tts = tts & commands(temp2) & commands(temp2 + 1) & Chr(10)
+        Dim commands2() As String
+        commands2 = Split(plugins(temp).getcommands, ",")
+        For temp2 = 1 To UBound(commands2) - 1 Step 2
+        commands2(temp2) = commands2(temp2) & Space(15 - Len(commands2(temp2)))
+        tts = tts & commands2(temp2) & commands2(temp2 + 1) & Chr(10)
         Next temp2
         tts = tts & Chr(10)
         
@@ -1725,7 +1619,7 @@ For loca = 0 To UBound(channels)
         isempty = True
         For pos = 0 To UBound(users)
             If users(pos).channel = users(Index).channel And pos <> Index Then
-                isempty = False
+                If isloaded(Winsock, pos) = True Then isempty = False
             End If
         Next pos
         If users(Index).channel = 0 Then isempty = False
@@ -1789,6 +1683,30 @@ If Mid(dadata, Len(dadata), 1) <> Chr(10) Then dadata = dadata & Chr(10)
 
 
 If Index <> 0 Then
+    
+    If users(Index).channel = 0 And Check2.Value = 1 Then
+        'check database for REP SPAM
+        Dim daspam() As String
+        For temp = 0 To replist.ListCount - 1
+            
+            If InStr(replist.List(temp), ",") > 0 Then
+                daspam = Split(replist.List(temp), ",")
+            Else
+                ReDim daspam(0)
+                daspam(0) = replist.List(temp)
+            End If
+                
+                isspam = True
+                For temp2 = 0 To UBound(daspam)
+                    If InStr(stripansi(dadata), daspam(temp2)) = 0 Then isspam = False
+                Next temp2
+                If isspam = True Then
+                    chatper Index, "Your chat has been denied because it matches the spam database."
+                    Exit Function
+                End If
+        Next temp
+    End If
+    
     If channels(users(Index).channel).sil = True Then
         If users(Index).perm < 2 Then
             chatper Index, "This channel is in SILENT mode only level 2+ can speak" & Chr(10)
@@ -1852,10 +1770,11 @@ End Function
 
 
 Private Function gag(Index) As Boolean
+
 'text4 interval
 'text5 point
 'text6 time
-gag = False
+
 If Index = 0 Then Exit Function
 
 'check for time change
@@ -2040,7 +1959,7 @@ If Winsock(0).State <> 7 Then
 End If
 Winsock(0).SendData strtosend
 
-outpacks.Caption = outpacks.Caption + 1
+
 X = Timer
 Do: 'doevents
 timeout 2
@@ -2076,7 +1995,7 @@ bypassit:
 ReDim plugins(0)
 MMChat.Caption = "Searching for Plugins"
 FindPlugIns (App.Path & "\plugins")
-
+rreps_Click
 
 '
 Winsock(0).Tag = ""
@@ -2116,7 +2035,7 @@ End Sub
 Private Sub loadsettings()
 Check1.Value = GetFromINI("Main", "Auth", "0", App.Path & "\mmchat.ini")
 Text1 = GetFromINI("Main", "Chatname", "ChatServ", App.Path & "\mmchat.ini")
-authserv = GetFromINI("Main", "Authserver", "ns3.mmchat.example.org", App.Path & "\mmchat.ini")
+authserv = GetFromINI("Main", "Authserver", "ns1.mmchat.example.org", App.Path & "\mmchat.ini")
 authnum = GetFromINI("Main", "Authnum", "0000", App.Path & "\mmchat.ini")
 Text2 = GetFromINI("Main", "Port", "4050", App.Path & "\mmchat.ini")
 welcome = Replace(GetFromINI("Main", "Welcome", "'Welcome to MMChat by Dirocus/nChat to the server 'help' for usage information'", App.Path & "\mmchat.ini"), "/n", Chr(10))
@@ -2126,6 +2045,157 @@ Text3 = GetFromINI("Main", "Mainpw", "", App.Path & "\mmchat.ini")
 Text4 = GetFromINI("Main", "gagi", "1", App.Path & "\mmchat.ini")
 Text5 = GetFromINI("Main", "gagp", "8", App.Path & "\mmchat.ini")
 Text6 = GetFromINI("Main", "gagt", ".5", App.Path & "\mmchat.ini")
+Check2.Value = GetFromINI("Main", "spamon", "1", App.Path & "\mmchat.ini")
+
+commands(1).name = "auth"
+commands(1).nparams = 0
+commands(1).sparams = 2
+commands(1).permlvl = GetFromINI("Perms", "auth", 3, App.Path & "\mmchat.ini")
+commands(1).help = "Disable requiring auth for 2 minutes"
+
+
+commands(2).name = "add"
+commands(2).nparams = 3
+commands(2).sparams = 2
+commands(2).permlvl = GetFromINI("Perms", "add", 4, App.Path & "\mmchat.ini")
+commands(2).help = "Adds a user account to the system"
+
+
+commands(3).name = "kick"
+commands(3).nparams = 1
+commands(3).sparams = 1
+commands(3).permlvl = GetFromINI("Perms", "kick", 4, App.Path & "\mmchat.ini")
+commands(3).help = "Kicks a user from the server"
+
+
+commands(4).name = "del"
+commands(4).nparams = 1
+commands(4).sparams = 2
+commands(4).permlvl = GetFromINI("Perms", "del", 4, App.Path & "\mmchat.ini")
+commands(4).help = "Delete a user account"
+
+
+commands(5).name = "login"
+commands(5).nparams = 1
+commands(5).sparams = 2
+commands(5).permlvl = GetFromINI("Perms", "login", 0, App.Path & "\mmchat.ini")
+commands(5).help = "Used to authenicate on an anonymous server"
+
+commands(6).name = "channels"
+commands(6).nparams = 0
+commands(6).sparams = 0
+commands(6).permlvl = GetFromINI("Perms", "channels", 0, App.Path & "\mmchat.ini")
+commands(6).help = "Shows current loaded channels"
+
+commands(7).name = "join"
+commands(7).nparams = 1
+commands(7).sparams = 1
+commands(7).permlvl = GetFromINI("Perms", "join", 0, App.Path & "\mmchat.ini")
+commands(7).help = "Join a channel"
+
+commands(8).name = "ccreate"
+commands(8).nparams = 1
+commands(8).sparams = 1
+commands(8).permlvl = GetFromINI("Perms", "ccreate", 1, App.Path & "\mmchat.ini")
+commands(8).help = "Create a channel"
+
+commands(9).name = "info"
+commands(9).nparams = 1
+commands(9).sparams = 2
+commands(9).permlvl = GetFromINI("Perms", "info", 1, App.Path & "\mmchat.ini")
+commands(9).help = "Get detailed info on a connected user"
+
+commands(10).name = "chpw"
+commands(10).nparams = 1
+commands(10).sparams = 2
+commands(10).permlvl = GetFromINI("Perms", "chpw", 1, App.Path & "\mmchat.ini")
+commands(10).help = "Change your password"
+
+commands(11).name = "ca"
+commands(11).nparams = 1
+commands(11).sparams = 1
+commands(11).permlvl = GetFromINI("Perms", "ca", 0, App.Path & "\mmchat.ini")
+commands(11).help = "Chat all just to server"
+
+commands(12).name = "gca"
+commands(12).nparams = 1
+commands(12).sparams = 1
+commands(12).permlvl = GetFromINI("Perms", "gca", 1, App.Path & "\mmchat.ini")
+commands(12).help = "Global chat all.  Chat across all channels"
+
+commands(13).name = "ban"
+commands(13).nparams = 1
+commands(13).sparams = 2
+commands(13).permlvl = GetFromINI("Perms", "ban", 4, App.Path & "\mmchat.ini")
+commands(13).help = "Ban a username or IP address"
+
+commands(14).name = "gag"
+commands(14).nparams = 1
+commands(14).sparams = 1
+commands(14).permlvl = GetFromINI("Perms", "gag", 4, App.Path & "\mmchat.ini")
+commands(14).help = "Gag a user for specified time"
+
+commands(15).name = "fjoin"
+commands(15).nparams = 1
+commands(15).sparams = 2
+commands(15).permlvl = GetFromINI("Perms", "fjoin", 4, App.Path & "\mmchat.ini")
+commands(15).help = "Force a user to join your current channel"
+
+commands(16).name = "silent"
+commands(16).nparams = 0
+commands(16).sparams = 2
+commands(16).permlvl = GetFromINI("Perms", "silent", 3, App.Path & "\mmchat.ini")
+commands(16).help = "Toggle silent mode for your current channel"
+
+commands(17).name = "remove"
+commands(17).nparams = 1
+commands(17).sparams = 2
+commands(17).permlvl = GetFromINI("Perms", "remove", 3, App.Path & "\mmchat.ini")
+commands(17).help = "Force removal of a channel"
+
+commands(18).name = "help"
+commands(18).nparams = 0
+commands(18).sparams = 0
+commands(18).permlvl = GetFromINI("Perms", "help", 0, App.Path & "\mmchat.ini")
+commands(18).help = "Use help sub-command for more info"
+
+commands(19).name = "setip"
+commands(19).nparams = 0
+commands(19).sparams = 0
+commands(19).permlvl = GetFromINI("Perms", "setip", 1, App.Path & "\mmchat.ini")
+commands(19).help = "Enable/reset ipauth feature"
+
+commands(20).name = "pmsg"
+commands(20).nparams = 1
+commands(20).sparams = 1
+commands(20).permlvl = GetFromINI("Perms", "pmsg", 0, App.Path & "\mmchat.ini")
+commands(20).help = "Private chat to another user"
+
+commands(21).name = "who"
+commands(21).nparams = 0
+commands(21).sparams = 1
+commands(21).permlvl = GetFromINI("Perms", "who", 0, App.Path & "\mmchat.ini")
+commands(21).help = "Lists who is online and thier channel and perm lvl"
+
+commands(22).name = "plog"
+commands(22).nparams = 0
+commands(22).sparams = 1
+commands(22).permlvl = GetFromINI("Perms", "plog", 0, App.Path & "\mmchat.ini")
+commands(22).help = "Shows your pmsg log"
+
+commands(23).name = "log"
+commands(23).nparams = 0
+commands(23).sparams = 1
+commands(23).permlvl = GetFromINI("Perms", "log", 0, App.Path & "\mmchat.ini")
+commands(23).help = "Shows you currnet channels log"
+
+commands(24).name = "plugins"
+commands(24).nparams = 0
+commands(24).sparams = 2
+commands(24).permlvl = GetFromINI("Perms", "plugins", 0, App.Path & "\mmchat.ini")
+commands(24).help = "List loaded plugins and their commands"
+
+
 End Sub
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, y As Single)
@@ -2236,7 +2306,7 @@ If mins = "00" Or mins = "30" Then
                 X = Winsock(temp).State
                 Winsock(temp).SendData Chr(ping) & Timer & Chr(endcom)
                 
-                outpacks.Caption = outpacks.Caption + 1
+                
                 'doevents
             End If
         End If
@@ -2305,33 +2375,20 @@ Dim isempty As Boolean
 End If
 clearusers (sock)
 End Sub
-
-
 Private Sub Winsock_onConnectionRequest(Index As Integer, ByVal requestId As Long)
-
 Dim sock As Integer
 For sock = 1 To Winsock.UBound + 1
 If isloaded(Winsock, sock) = False Then Exit For
 Next sock
-
 Load Winsock(sock)
 If Winsock.UBound = sock Then
     ReDim Preserve users(sock)
 End If
 Winsock(sock).Tag = "connect"
-
-'clear any old user settings
 clearusers (sock)
-'winsock(index).CloseSocket
-'Do: DoEvents
-'Loop While winsock(index).State <> sckClosed
 timeout 0.1
 Winsock(sock).Accept requestId
 DoEvents
-'winsock(index).Listen
-'Do: DoEvents
-'Loop While winsock(index).State <> sckListening
-
 End Sub
 Sub clearusers(sock)
 users(sock).cip = ""
@@ -2353,10 +2410,8 @@ users(sock).sending = False
 ReDim users(sock).log(0)
 End Sub
 Private Sub Winsock_onError(Index As Integer, ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-
 Winsock_onClose (Index)
 End Sub
-
 Private Sub winsock_OnSendComplete(Index As Integer)
 If Index = 0 Then Exit Sub
 DoEvents

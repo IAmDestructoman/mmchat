@@ -11,7 +11,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-f 'main = result
+ 'main = result
 'there can be multipule results seperated by ~
 'the first char of each result tells if you should:
 '0 chatper

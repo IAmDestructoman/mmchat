@@ -3,12 +3,14 @@ Class=plugin; BattleShip.cls
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\WINDOWS\system32\stdole2.tlb#OLE Automation
 Form=Form1.frm
 Startup="(None)"
+HelpFile=""
+Title="BattleShip"
 ExeName32="BattleShip.dll"
-Path32="C:\Program Files\Microsoft Visual Studio"
+Path32="..\..\..\..\mmchat\MMchat - Gravis\plugins"
 Command32=""
 Name="BattleShip"
 HelpContextID="0"
-CompatibleMode="1"
+CompatibleMode="0"
 CompatibleEXE32="..\BattleShip.dll"
 MajorVer=1
 MinorVer=0
@@ -32,6 +34,7 @@ Retained=0
 ThreadPerObject=0
 MaxNumberOfThreads=1
 ThreadingModel=1
+DebugStartupOption=0
 
 [MS Transaction Server]
 AutoRefresh=1
