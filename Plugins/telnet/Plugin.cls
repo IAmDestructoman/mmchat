@@ -26,14 +26,16 @@ Public Function GetName() As String
     
     
     GetName = "Telnet connector Plugin By Dirocus " & App.Major & "." & App.Minor
-    If Form1.Winsock1(0).State <> 2 Then
+    
+End Function
+Public Function init(othervars As String) As String
+If Form1.Winsock1(0).State <> 2 Then
         Form1.Winsock1(0).Close
-        Form1.Winsock1(0).LocalPort = Val(GetFromINI("Main", "Port", "4050", App.Path & "\..\mmchat.ini")) + 1
+        Form1.Winsock1(0).LocalPort = Val(GetFromINI("Main", "Port", "4050", othervars & "\mmchat.ini")) + 1
         Form1.Winsock1(0).Listen
     
     End If
 End Function
-
 Public Function GetCommands() As String
 
     GetCommands = ",,"
@@ -52,5 +54,6 @@ End If
 End Function
 
 Public Function main(dadata As String, othervars As String) As String
+
 End Function
 

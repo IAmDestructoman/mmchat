@@ -114,7 +114,9 @@ Public Function GetCommands() As String
     GetCommands = ",BSHelp,0,BSChallenge,0,BSFire,0,BSShow,0,BSReady,0,BSPlace,0,BSRemove,0,BSQuit,0"
 
 End Function
+Public Function init(othervars) As String
 
+End Function
 Function getvar(varname As String, othervars As String) As String
 If InStr(othervars, varname & "=") = 0 Then
     getvar = vbNullString
@@ -163,7 +165,52 @@ params = Split(dadata, " ")
 Select Case LCase(params(0))
 Case "bshelp"
     'help file
-    main = "0help file here."
+    main = "0" & abold
+main = main & acyan & "*******--------******" & Chr(10)
+main = main & ayellow & "BATTLESHIP By Dirocus" & Chr(10)
+main = main & acyan & "*******--------******" & Chr(10) & Chr(10)
+
+main = main & ablue & "Basic Commands and Procedures:" & Chr(10)
+main = main & ared & "BSHelp             " & acyan & "|This help file." & Chr(10)
+main = main & ared & "BSChallenge <name> " & acyan & "|Sends a game request to an opponent" & Chr(10)
+main = main & ared & "                   " & acyan & "|NOTE: Use the person's Orig. Name as listed on Who" & Chr(10)
+main = main & ared & "BSShow             " & acyan & "|Show the maps of both your ships and your targets." & Chr(10)
+main = main & ared & "BSPlace <type> <a1-j10> <r|d>" & Chr(10)
+main = main & ared & "                   " & acyan & "|Use to set up your ships before the game.  <type> is" & Chr(10)
+main = main & ared & "                   " & acyan & "|f, b, c, d, s, or p, respectively for each ship.           " & Chr(10)
+main = main & ared & "                   " & acyan & "|<a1-j10> is the point you wish to place at, and <r|d>" & Chr(10)
+main = main & ared & "                   " & acyan & "|determines whether the ship will stretch right or down" & Chr(10)
+main = main & ared & "                   " & acyan & "|from your original input point." & Chr(10)
+main = main & ared & "BSRemove           " & acyan & "|Used during placement.  Removes a ship from the board." & Chr(10)
+main = main & ared & "BSReady            " & acyan & "|End ship placement." & Chr(10)
+main = main & ared & "BSFire <a-j><1-10> " & acyan & "|Use when it's your turn to fire your shot." & Chr(10)
+main = main & ared & "BSQuit             " & acyan & "|Quits and forfeits the game." & Chr(10) & Chr(10)
+
+main = main & ared & "Ship Information:" & Chr(10) & Chr(10)
+
+main = main & "-=Class A:Aircraft Carrier=-" & Chr(10)
+main = main & "Size: Large (6)" & Chr(10) & Chr(10)
+
+main = main & "-=Class B:Battleship=-" & Chr(10)
+main = main & "Size: Large (5)" & Chr(10) & Chr(10)
+
+main = main & "-=Class C:Cruiser=-" & Chr(10)
+main = main & "Size: Medium-Large (4)" & Chr(10) & Chr(10)
+
+main = main & "-=Class D:Destroyer=-" & Chr(10)
+main = main & "Size: Medium (3)" & Chr(10) & Chr(10)
+
+main = main & "-=Class S:Submarine=-" & Chr(10)
+main = main & "Size: Medium (3)" & Chr(10) & Chr(10)
+
+main = main & "-=Class P:Patrol Boat=-" & Chr(10)
+main = main & "Size: Small (2)" & Chr(10)
+
+
+    
+    
+    
+    
     Exit Function
 Case "bschallenge"
     'challenge a user to BATTLESHIP
@@ -210,7 +257,7 @@ Case "bsfire"
         main = "0Its not your turn!."
         Exit Function
     End If
-    syntax = "0" & Chr(10) & "bsfire syntax here"
+    syntax = "0" & Chr(10) & ared & "BSFire <a-j><1-10> " & acyan & "|Use when it's your turn to fire your shot." & Chr(10)
     If UBound(params) <> 1 Then
         main = syntax
         Exit Function
@@ -499,7 +546,16 @@ Case "bsplace"
         End If
     End If
     
-    syntax = "0" & Chr(10) & "bsplace syntax here"
+    syntax = "0" & Chr(10)
+    syntax = syntax & ared & "BSPlace <type> <a1-j10> <r|d>" & Chr(10)
+    syntax = syntax & ared & "                   " & acyan & "|Use to set up your ships before the game.  <type> is" & Chr(10)
+    syntax = syntax & ared & "                   " & acyan & "|f, b, c, d, s, or p, respectively for each ship.           " & Chr(10)
+    syntax = syntax & ared & "                   " & acyan & "|<a1-j10> is the point you wish to place at, and <r|d>" & Chr(10)
+    syntax = syntax & ared & "                   " & acyan & "|determines whether the ship will stretch right or down" & Chr(10)
+    syntax = syntax & ared & "                   " & acyan & "|from your original input point." & Chr(10)
+
+    
+    
     If UBound(params) <> 3 Then
         main = syntax
         Exit Function

@@ -18,7 +18,9 @@ End Function
 Public Function GetCommands() As String
     GetCommands = ",Riddle,0,Combs,0,ClanTown,0,"
 End Function
+Public Function init(othervars) As String
 
+End Function
 Public Function main(dadata As String, othervars As String) As String
 Form1.Winsock1.Close
 Dim params() As String

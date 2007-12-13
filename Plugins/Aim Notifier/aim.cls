@@ -30,6 +30,7 @@ Public Function GetName() As String
 
 End Function
 
+
 Public Function GetCommands() As String
 
     GetCommands = ",AIMNotify,4,AIMAdd,1,AIMList,4,"
@@ -47,9 +48,9 @@ Else
 End If
 End Function
 
+Public Function init(othervars As String)
 
-
-
+End Function
 Public Function main(dadata As String, othervars As String) As String
 abold = Chr(27) & "[1m"
 areset = Chr(27) & "[0m"

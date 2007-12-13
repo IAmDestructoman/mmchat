@@ -19,6 +19,7 @@ Public datime As Variant
 Public authdis As String
 Public authserv As String
 Public authnum As String
+Public authhost As String
 Public gaglist(1 To 50, 1 To 2) As Variant
 Public Type userinfo
     name As String
@@ -31,12 +32,13 @@ Public Type userinfo
     ocn As String
     contime As String
     lastchattime As String
+    idletime As Variant
     pingtime As String
     gtimer As String
-    gaggedtime As String
+    gaggedtime As Variant
     log() As String
     channel As Integer
-    sending As Boolean
+    idle As Boolean
 End Type
 Public Type channelinfo
     name As String
@@ -58,4 +60,9 @@ Public channels() As channelinfo
 Global users() As userinfo
 Public plugins() As Object
 Public commands(1 To 24) As commandinfo
+Sub timeout(X)
+start = Timer
+Do: DoEvents
+Loop While start + X > Timer
+End Sub
 

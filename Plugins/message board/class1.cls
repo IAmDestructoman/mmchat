@@ -20,6 +20,9 @@ End Function
 Public Function GetCommands() As String
     GetCommands = ",Read,0,Take,1,Post,1,"
 End Function
+Public Function init(othervars) As String
+
+End Function
 Function getvar(varname As String, othervars As String) As String
 If InStr(othervars, varname & "=") = 0 Then
     getvar = vbNullString

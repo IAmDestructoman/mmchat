@@ -159,7 +159,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     CSck.LocalPort = PropBag.ReadProperty("LocalPort", CSck.LocalPort)
     CSck.RemoteHost = PropBag.ReadProperty("RemoteHost", CSck.RemoteHost)
     CSck.RemotePort = PropBag.ReadProperty("RemotePort", CSck.RemotePort)
-    CSck.Protocol = PropBag.ReadProperty("Protocol", CSck.Protocol)
+ CSck.Protocol = PropBag.ReadProperty("Protocol", CSck.Protocol)
 End Sub
 
 Private Sub UserControl_Resize()

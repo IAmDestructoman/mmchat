@@ -66,7 +66,7 @@ If Mid(dadata, 1, 1) = "." Then
         Winsock1(Index).Tag = Mid(dadata, 7, Len(dadata))
         Winsock1(Index).SendData "Chatname set to " & Winsock1(Index).Tag & vbCrLf
         Winsock1(Index).SendData "Tring to connect.." & vbCrLf
-        Winsock2(Index).Connect Winsock1(0).LocalIP, Val(GetFromINI("Main", "Port", "4050", App.Path & "\..\mmchat.ini"))
+        Winsock2(Index).Connect Winsock1(0).LocalIP, Winsock1(0).LocalPort - 1
     Case "help"
         Winsock1(Index).SendData "Use the following commands.." & vbCrLf & ".setn to set your chat name" & vbCrLf & ".chat to chat to the server"
     Case "chat"

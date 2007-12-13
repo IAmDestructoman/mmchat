@@ -49,8 +49,11 @@ Print #9, dafile;
 Close 9
 Socket1.CloseSocket
 FileCopy App.Path & "\mmchat.new.exe", App.Path & "\mmchat.prg"
+Unload MMChat
+timeout 1
 Shell App.Path & "\mmchat.new.exe"
 
+Unload Form2
 End
 
 End Sub

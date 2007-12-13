@@ -66,10 +66,6 @@ Form1.Caption = Winsock1.State
 
 End Sub
 
-Private Sub Form_Load()
-
-End Sub
-
 Private Sub Winsock1_DataArrival(ByVal bytesTotal As Long)
     Dim Text As String
    

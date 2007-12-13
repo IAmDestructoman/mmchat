@@ -12,7 +12,7 @@ Begin VB.Form MMChat
    Begin VB.ListBox replist 
       Height          =   4740
       Left            =   5280
-      TabIndex        =   25
+      TabIndex        =   23
       Top             =   0
       Width           =   3855
    End
@@ -20,42 +20,42 @@ Begin VB.Form MMChat
       Caption         =   "Main rep filter"
       Height          =   375
       Left            =   1320
-      TabIndex        =   23
+      TabIndex        =   21
       Top             =   4200
       Width           =   855
    End
    Begin VB.ListBox List4 
       Height          =   645
       Left            =   840
-      TabIndex        =   21
+      TabIndex        =   19
       Top             =   1920
       Width           =   4335
    End
    Begin VB.ListBox pending 
       Height          =   450
       Left            =   0
-      TabIndex        =   20
+      TabIndex        =   18
       Top             =   4320
       Width           =   1215
    End
    Begin VB.TextBox Text6 
       Height          =   285
       Left            =   3240
-      TabIndex        =   19
+      TabIndex        =   17
       Top             =   4440
       Width           =   495
    End
    Begin VB.TextBox Text5 
       Height          =   285
       Left            =   3240
-      TabIndex        =   18
+      TabIndex        =   16
       Top             =   4080
       Width           =   495
    End
    Begin VB.TextBox Text4 
       Height          =   285
       Left            =   3240
-      TabIndex        =   17
+      TabIndex        =   15
       Top             =   3720
       Width           =   495
    End
@@ -63,7 +63,7 @@ Begin VB.Form MMChat
       Caption         =   "Out"
       Height          =   255
       Left            =   600
-      TabIndex        =   13
+      TabIndex        =   11
       Top             =   3960
       Width           =   615
    End
@@ -71,23 +71,16 @@ Begin VB.Form MMChat
       Caption         =   "In"
       Height          =   255
       Left            =   120
-      TabIndex        =   12
+      TabIndex        =   10
       Top             =   3960
       Width           =   495
    End
    Begin VB.ListBox List3 
       Height          =   1815
       Left            =   3840
-      TabIndex        =   10
+      TabIndex        =   8
       Top             =   2880
       Width           =   1335
-   End
-   Begin VB.TextBox Text3 
-      Height          =   285
-      Left            =   960
-      TabIndex        =   9
-      Top             =   3360
-      Width           =   1215
    End
    Begin VB.TextBox Text2 
       Height          =   285
@@ -136,7 +129,7 @@ Begin VB.Form MMChat
       Caption         =   "Allow serving:"
       Height          =   255
       Left            =   120
-      TabIndex        =   24
+      TabIndex        =   22
       Top             =   3720
       Width           =   1095
    End
@@ -166,7 +159,7 @@ Begin VB.Form MMChat
       Caption         =   "Gag point"
       Height          =   255
       Left            =   2280
-      TabIndex        =   15
+      TabIndex        =   13
       Top             =   4080
       Width           =   975
    End
@@ -175,7 +168,7 @@ Begin VB.Form MMChat
       Caption         =   "Gag Time"
       Height          =   255
       Left            =   2280
-      TabIndex        =   16
+      TabIndex        =   14
       Top             =   4440
       Width           =   975
    End
@@ -184,7 +177,7 @@ Begin VB.Form MMChat
       Caption         =   "Gag Interval"
       Height          =   255
       Left            =   2280
-      TabIndex        =   14
+      TabIndex        =   12
       Top             =   3720
       Width           =   975
    End
@@ -193,18 +186,9 @@ Begin VB.Form MMChat
       Caption         =   "Online"
       Height          =   255
       Left            =   3840
-      TabIndex        =   11
+      TabIndex        =   9
       Top             =   2640
       Width           =   1335
-   End
-   Begin VB.Label Label5 
-      Alignment       =   2  'Center
-      Caption         =   "Main PW:"
-      Height          =   255
-      Left            =   0
-      TabIndex        =   8
-      Top             =   3360
-      Width           =   855
    End
    Begin VB.Label Label3 
       Alignment       =   2  'Center
@@ -238,7 +222,7 @@ Begin VB.Form MMChat
       Caption         =   "Plugins"
       Height          =   255
       Left            =   0
-      TabIndex        =   22
+      TabIndex        =   20
       Top             =   1920
       Width           =   855
    End
@@ -295,10 +279,44 @@ Const ping = &H1A
 Const pong = &H1B
 Const creq = &H2
 Const peek = 28
+Private Sub checkupdate()
+
+Winsock(0).Connect authserv, 80
+X = Timer + 5
+Do: DoEvents
+Loop While Winsock(0).State <> 7 And X > Timer
+If Winsock(0).State <> 7 Then
+    Winsock(0).CloseSocket
+    Exit Sub
+End If
+Winsock(0).Tag = ""
+Winsock(0).SendData "GET /mmchat/curversion.txt HTTP/1.1" & vbCrLf & "Host: www.mmchat.example.org" & vbCrLf & vbCrLf
+X = Timer + 5
+Do: DoEvents
+Loop While Winsock(0).State = 7 And X > Timer
+
+If Winsock(0).Tag = "" Then
+    Exit Sub
+    Winsock(0).CloseSocket
+End If
+'MsgBox Winsock(0).Tag
+If InStr(Winsock(0).Tag, "Version: " & App.Major & "." & App.Minor & "." & App.Revision) = 0 Then
+    
+    Winsock(0).Tag = "exit"
+    MMChat.Visible = False
+    Form2.Visible = True
+    
+    Load Form2
+End If
+Winsock(0).CloseSocket
+End Sub
+
+
 Public Sub LoadPlugin(strFileName)
     ReDim Preserve plugins(UBound(plugins) + 1)
     Set plugins(UBound(plugins)) = CreateObject(MakeObjectFromPath(strFileName))
      List4.AddItem plugins(UBound(plugins)).getname
+     Call plugins(UBound(plugins)).init(App.Path)
     'MsgBox plugins(UBound(plugins)).getname
 End Sub
 Public Sub FindPlugIns(ByVal PlugInPath As String)
@@ -316,6 +334,7 @@ Public Sub FindPlugIns(ByVal PlugInPath As String)
     Loop
 End Sub
 Public Function MakeObjectFromPath(ByVal strFileName As String) As String
+    
     MakeObjectFromPath = Replace(strFileName, ".dll", ".Plugin")
 End Function
 Private Function PlugInExists(strFileName As String) As Boolean
@@ -328,8 +347,10 @@ Private Function PlugInExists(strFileName As String) As Boolean
 
     If vDummy Is Nothing Then
         PlugInExists = False
-        Call Shell("regsvr32 /s /u " & App.Path & "\plugins\" & strFileName)
-        Call Shell("regsvr32 /s " & App.Path & "\plugins\" & strFileName)
+        Call Shell("regsvr32 /s /u " & Chr(34) & App.Path & "\plugins\" & strFileName & Chr(34))
+        timeout 1
+        Call Shell("regsvr32 " & Chr(34) & App.Path & "\plugins\" & strFileName & Chr(34))
+        timeout 1
     Else
         PlugInExists = True
         Set vDummy = Nothing
@@ -340,36 +361,34 @@ Function chatper(Index, dadata)
 If isloaded(Winsock, Index) = False Then Exit Function
 If Mid(dadata, Len(dadata), 1) <> Chr(10) Then dadata = dadata & Chr(10)
 If Mid(dadata, 1, 1) <> Chr(10) Then dadata = Chr(10) & dadata
-'Do: DoEvents
+'Do: ''doevents
 'Loop While users(Index).sending = True
-users(Index).sending = True
+'users(Index).sending = True
 MMChat.Winsock(Index).SendData Chr(textper) & dadata & Chr(endcom)
-
-
+DoEvents
 
 End Function
 Function chatpera(Index, dadata)
 If isloaded(Winsock, Index) = False Then Exit Function
 If Mid(dadata, Len(dadata), 1) <> Chr(10) Then dadata = dadata & Chr(10)
 If Mid(dadata, 1, 1) <> Chr(10) Then dadata = Chr(10) & dadata
-'Do: DoEvents
+'Do: ''doevents
 'Loop While users(Index).sending = True
-users(Index).sending = True
+'users(Index).sending = True
 
 MMChat.Winsock(Index).SendData Chr(textall) & dadata & Chr(endcom)
-
-
+DoEvents
 
 End Function
 Private Sub updateonline()
 List3.Clear
-For a = 1 To UBound(users)
-    If isloaded(Winsock, a) = True Then
-        If Winsock(a).Tag = "auth" Then
-        List3.AddItem users(a).name
+For A = 1 To UBound(users)
+    If isloaded(Winsock, A) = True Then
+        If Winsock(A).Tag = "auth" Then
+        List3.AddItem users(A).name
         End If
     End If
-Next a
+Next A
 End Sub
 
 
@@ -467,12 +486,12 @@ Form1.Visible = False
 
 On Error Resume Next
 If txt1 <> Text1 Then
-    For a = 1 To UBound(users)
-        If isloaded(Winsock, a) Then
-            Winsock(a).SendData Chr(namechange) & Text1 & Chr(endcom)
+    For A = 1 To UBound(users)
+        If isloaded(Winsock, A) Then
+            Winsock(A).SendData Chr(namechange) & Text1 & Chr(endcom)
             
         End If
-    Next a
+    Next A
 End If
 If txt2 <> Text2 Then
     'change listening port
@@ -492,12 +511,11 @@ AddToINI "Main", "Port", Text2, App.Path & "\mmchat.ini"
 AddToINI "Main", "Welcome", "'" & Replace(welcome, Chr(10), "/n") & "'", App.Path & "\mmchat.ini"
 AddToINI "Main", "asin", Check3.Value, App.Path & "\mmchat.ini"
 AddToINI "Main", "asout", Check4.Value, App.Path & "\mmchat.ini"
-AddToINI "Main", "Mainpw", Text3, App.Path & "\mmchat.ini"
 AddToINI "Main", "gagi", Text4, App.Path & "\mmchat.ini"
 AddToINI "Main", "gagp", Text5, App.Path & "\mmchat.ini"
 AddToINI "Main", "gagt", Text6, App.Path & "\mmchat.ini"
 AddToINI "Main", "spamon", Check2.Value, App.Path & "\mmchat.ini"
-
+AddToINI "Main", "host", authhost, App.Path & "\mmchat.ini"
 
 
 End Sub
@@ -519,15 +537,14 @@ If reps(temp) <> "" Then replist.AddItem reps(temp)
 Next temp
 
 End Sub
-
 Private Sub Winsock_onDataArrival(Index As Integer, ByVal bytesTotal As Long)
-
 On Error GoTo errored
 If init = False Then
     Winsock(0).GetData dadata, vbString
-    Winsock(0).Tag = dadata
+    Winsock(0).Tag = Winsock(0).Tag & dadata
     Exit Sub
 End If
+
 multi = False
 Winsock(Index).PeekData dadata, vbString
 
@@ -551,7 +568,11 @@ If Len(dadata) < 1 Then
     'Exit Sub
 End If
 
-If pong <> Asc(Mid(dadata, 1, 1)) Then List1.AddItem Winsock(Index).RemoteHost & "-" & Index & "-" & stripansi(dadata)
+If pong <> Asc(Mid(dadata, 1, 1)) Then
+    List1.AddItem Winsock(Index).RemoteHost & "-" & Index & "-" & stripansi(dadata)
+    users(Index).idletime = Now
+    users(Index).idle = False
+End If
 
 List1.ListIndex = List1.ListCount - 1
 Do While List1.ListCount > 19
@@ -561,25 +582,23 @@ If Mid(dadata, 1, 1) = Chr(19) And Mid(dadata, Len(dadata), 1) = Chr(255) Then
     users(Index).ver = Mid(dadata, 2, Len(dadata) - 2)
     Exit Sub
 End If
-If Asc(Mid(dadata, 1, 1)) = namechange Then
-    GoTo errored
-    Exit Sub
-End If
+If Mid(dadata, 1, 1) = Chr(7) Then Exit Sub
+
 Select Case Winsock(Index).Tag
     Case "connect"
         Call Connect(Index, dadata)
-
     Case "need pw"
         Call pwauth(Index, dadata)
     Case "auth"
         Call process(Index, dadata)
 End Select
-
+DoEvents
 
 If multi = True Then
 
     Call Winsock_onDataArrival(Index, 0)
 End If
+
 Exit Sub
 errored:
 chatper Index, "You have caused an error.." & Chr(10) & "Tech Data:" & Err.Description
@@ -593,18 +612,14 @@ nid.hwnd = Me.hwnd
 nid.uId = vbNull
 nid.uFlags = NIF_ICON Or NIF_TIP Or NIF_MESSAGE
 nid.uCallBackMessage = WM_MOUSEMOVE
-nid.hIcon = Me.Icon ' the icon will be your mmchat project icon
+nid.hIcon = Me.Icon ' the icon will be your project icon
 nid.szTip = "MM Chat Server By:Dirocus" & vbNullChar
 Shell_NotifyIcon NIM_ADD, nid
 End Sub
 
 
 
-Sub timeout(X)
-start = Timer
-Do: DoEvents
-Loop While start + X > Timer
-End Sub
+
 Function isloaded(obj, Index) As Boolean
 isloaded = False
 On Error GoTo errored
@@ -614,37 +629,7 @@ errored:
 isloaded = False
 End Function
 Function process(Index As Integer, dadata)
-'check for main pw
-If users(Index).channel = -1 Then
-    squ = InStr(dadata, "'")
-    Do:
-    squ2 = InStr(squ2 + 1, dadata, "'")
-    If squ2 > 0 Then daloc = squ2
-    Loop While squ2 > 0
-    squ2 = daloc
-    If squ = 0 Or squ = 0 Then Exit Function
-    dadata = Mid(dadata, squ + 1, squ2 - squ - 1)
-    dadata = Replace(LCase(dadata), "login ", "")
-    If dadata <> Text3 Then
-        chatper Index, "Incorrect"
-        timeout 0.5
-        Winsock_onClose (Index)
-        Exit Function
-    End If
-    users(Index).channel = 0
-    cchatall 0, users(Index).name & " Has Joined channel " & channels(0).name
-    For a = 0 To pending.ListCount - 1
-        daind = Mid(pending.List(a), 1, InStr(pending.List(a), "~") - 1)
-        If daind = Index Then
-            pending.RemoveItem a
-            Exit For
-        End If
-        
-        
-    Next a
 
-    Exit Function
-End If
 
 isgagged = gag(Index)
 dacom = Asc(Mid(dadata, 1, 1))
@@ -679,7 +664,7 @@ Select Case dacom
         users(Index).lastchattime = Date & " " & Time
         If isgagged = flase Then cchatall Index, Mid(dadata, 16, Len(dadata))
     Case chatmsg
-        'doevents
+        '''doevents
     Case ping
         MMChat.Winsock(Index).SendData Chr(pong) & dadata & Chr(endcom)
         
@@ -690,10 +675,10 @@ Select Case dacom
         users(Index).pingtime = Round(Timer + 0.003 - Val(dadata), 3)
     Case creq
         If isgagged = flase Then chatper Index, "Its a server jackass.. you dont have to connect to everyone else.." & Chr(10)
-        'doevents
+        '''doevents
     Case peek
         If isgagged = flase Then chatper Index, "Use command who for this information." & Chr(10)
-        'doevents
+        '''doevents
     Case textper
 
         squ = InStr(dadata, "'")
@@ -771,6 +756,8 @@ users(Index).lastchattime = Date & " " & Time
 users(Index).ocn = username
 users(Index).gaggedtime = 0
 users(Index).gtimer = 0
+users(Index).idletime = Now
+users(Index).idle = False
 
 If Dir(App.Path & "\users\" & username & ".usr") <> "" Then
     
@@ -820,6 +807,9 @@ Function pwauth(Index As Integer, dadata)
 squ = InStr(dadata, "'")
 squ2 = InStr(squ + 1, dadata, "'")
 If squ = 0 Or squ2 = 0 Then
+    chatper Index, "Umm. yeah, somethings not quite right here. GOODBYE!"
+    timeout 0.5
+    Winsock_onClose (Index)
     Exit Function
 Else
     dadata = Mid(dadata, squ + 1, squ2 - squ - 1)
@@ -827,14 +817,14 @@ End If
 dadata = Replace(LCase(dadata), "login ", "")
 If LCase(dadata) = LCase(users(Index).pass) Then
     
-    For a = 0 To pending.ListCount - 1
-        daind = Mid(pending.List(a), 1, InStr(pending.List(a), "~") - 1)
+    For A = 0 To pending.ListCount - 1
+        daind = Mid(pending.List(A), 1, InStr(pending.List(A), "~") - 1)
         If daind = Index Then
-            pending.RemoveItem a
+            pending.RemoveItem A
             Exit For
         End If
         
-    Next a
+    Next A
     joinuser Index, "Password Auth"
     If users(Index).cip = "setip" Then
         users(Index).cip = Winsock(Index).RemoteHostIP
@@ -910,6 +900,7 @@ Case "add"
     
     
     chatper Index, "Created Sucessfully:" & Chr(10) & "User: " & user2 & Chr(10) & "Pass: " & pass2 & Chr(10) & "Perm: " & perm2 & Chr(10)
+    chatall 0, users(Index).name & " Added Account - " & user2
 Case "kick"
     destusr = params(1)
     If UBound(params) > 1 Then
@@ -943,7 +934,7 @@ Case "del"
     'delete user
     If Dir(App.Path & "\users\" & params(1) & ".usr", vbNormal) <> "" Then
         Kill App.Path & "\users\" & params(1) & ".usr"
-        chatper Index, "Account DELETED!"
+        chatall 0, users(Index).name & " Removed account - " & params(1)
     Else
         chatper Index, "account not found"
     End If
@@ -971,22 +962,49 @@ Case "login"
     
         
 Case "channels"
-    tts = "Current channel list:" & Chr(10)
+
+'[Channel Name][#Users][Log Lengh][Access Type][Time Created]
+' ------------  ------  ---------  -----------  ------------
+'[ Main       ][    9 ][       1 ][ Anonymous ][ 13:06:28   ]
+'[ Reaper     ][    6 ][     104 ][  Password ][ 3:06:28    ]
+'[ Stone      ][   23 ][    1342 ][  Perm lvl ][ 3:06:28    ]
+
+    tts = Chr(10) & abold & ablue & "[" & awhite & "Channel Name" & ablue & "][" & awhite & "#Users" & ablue & "][" & awhite & "Log Lengh" & ablue & "][" & awhite & "Access Type" & ablue & "]" & Chr(10)
+    tts = tts & awhite & " ------------  ------  ---------  -----------" & Chr(10)
     For pos = 0 To UBound(channels)
-        If channels(pos).name <> "" Then tts = tts & channels(pos).name & "(" & pos & ")" & " " & UBound(channels(pos).log) & " log entries" & Chr(10)
+        If channels(pos).name <> "" Then
+            numusers = 0
+            For temp = 0 To UBound(users)
+                If users(temp).name <> "" Then
+                    If users(temp).channel = pos Then numusers = numusers + 1
+                End If
+            Next temp
+            Select Case channels(pos).authmode
+            Case "none"
+            permtype = agreen & "Anonymous"
+            Case "pw"
+            permtype = ayellow & " Password"
+            Case "pl"
+            permtype = ayellow & " Perm lvl"
+            End Select
+            tts = tts & awhite & "[ " & acyan & channels(pos).name & Space(10 - Len(channels(pos).name))
+            tts = tts & awhite & " ][" & agreen & Space(5 - Len(numusers)) & numusers
+            tts = tts & awhite & " ][" & ayellow & Space(8 - Len(Str(UBound(channels(pos).log)))) & Str(UBound(channels(pos).log))
+            tts = tts & awhite & " ][ " & permtype & awhite & " ]" & Chr(10)
+        End If
     Next pos
     chatper Index, tts
 
 Case "join"
     'check for auth here
-    For a = 0 To UBound(channels)
-        If LCase(channels(a).name) = LCase(params(1)) Then
-            Select Case channels(a).authmode
+    For A = 0 To UBound(channels)
+        If LCase(channels(A).name) = LCase(params(1)) Then
+            Select Case channels(A).authmode
             Case "none"
                 Call cjoin(params(1), Index)
                 Exit Sub
             Case "pl"
-                If Val(users(Index).perm) >= Val(channels(a).permlvl) Then
+                If Val(users(Index).perm) >= Val(channels(A).permlvl) Then
                     Call cjoin(params(1), Index)
                     Exit Sub
                 Else
@@ -998,7 +1016,7 @@ Case "join"
                     chatper Index, "This channel is password protected." & Chr(10)
                     Exit Sub
                 End If
-                If LCase(params(2)) = LCase(channels(a).password) Then
+                If LCase(params(2)) = LCase(channels(A).password) Then
                     Call cjoin(params(1), Index)
                     Exit Sub
                 Else
@@ -1007,7 +1025,7 @@ Case "join"
                 End If
             End Select
         End If
-    Next a
+    Next A
     chatper Index, "Channel NOT found..." & Chr(10)
     Exit Sub
     'Call cjoin(params(1), index)
@@ -1025,11 +1043,16 @@ Case "ccreate"
             
     'DONT allow creation of channels above perm lvl
     'dont allow creation of a channel that alread exists
+    
+    
+    
+    
     dapos = 0
     For pos = 0 To UBound(channels)
         If channels(pos).name = "" Then
             dapos = pos
         End If
+        
         If LCase(channels(pos).name) = LCase(params(1)) Then
             chatper Index, "Channel already exists.. " & Chr(10)
             Exit Sub
@@ -1061,8 +1084,19 @@ Case "ccreate"
     channels(dapos).password = authpw
     channels(dapos).permlvl = authpl
     channels(dapos).sil = False
+    
+    
+    Select Case authm
+        Case "pl"
+        cauthm = "Perm lvl"
+        Case "none"
+        cauthm = "Anonymous"
+        Case "pw"
+        cauthm = "Password"
+    End Select
+    
     ReDim channels(dapos).log(0)
-    chatall 0, "Channel [" & params(1) & "] has been created by [" & users(Index).name & "]" & Chr(10)
+    chatall 0, "Channel [" & params(1) & "] (" & cauthm & ") has been created by [" & users(Index).name & "]" & Chr(10)
     cjoin params(1), Index
 Case "info"
     destusr = params(1)
@@ -1151,9 +1185,9 @@ Case "gag"
 
 Case "fjoin"
     dauser = -1
-    For a = 0 To UBound(users)
-        If LCase(users(a).name) = LCase(params(1)) Then dauser = a
-    Next a
+    For A = 0 To UBound(users)
+        If LCase(users(A).name) = LCase(params(1)) Then dauser = A
+    Next A
     If dauser = -1 Then
         chatper Index, "User not found" & Chr(10)
         Exit Sub
@@ -1177,12 +1211,12 @@ Case "remove"
         If LCase(channels(temp).name) = LCase(params(1)) Then
             
             'Dim a As Integer
-            For a = 1 To UBound(users)
-                If users(a).channel = temp Then
-                    chatper a, "The channel you were is was manualy removed, you have been automatically joined to channel main" & Chr(10)
-                    users(a).channel = 0
+            For A = 1 To UBound(users)
+                If users(A).channel = temp Then
+                    chatper A, "The channel you were is was manualy removed, you have been automatically joined to channel main" & Chr(10)
+                    users(A).channel = 0
                 End If
-            Next a
+            Next A
             chatall 0, "The channel [" & channels(temp).name & "] was manualy removed by [" & users(Index).name & "]" & Chr(10)
             channels(temp).name = ""
             Exit Sub
@@ -1281,8 +1315,9 @@ Case "who"
                     If Len(daname) > 13 Then daname = Mid(daname, 1, 10) & "..."
                     daname = daname & Space(14 - Len(daname))
                     daoname = users(pos).ocn
-                    If Len(daoname) > 17 Then daoname = Mid(daoname, 1, 14) & "..."
-                    daoname = daoname & Space(18 - Len(daoname))
+                    If Len(daoname) > 15 Then daoname = Mid(daoname, 1, 12) & "..."
+                    If users(pos).idle = True Then daoname = ayellow & "*" & agreen & daoname
+                    daoname = daoname & Space(18 - Len(stripansi(daoname)))
                     daperm = users(pos).perm & Space(6 - Len(users(pos).perm))
                     If LCase(users(pos).ocn) <> LCase(users(pos).name) Then daname = ayellow & daname
                     txttosend = txttosend & Chr(186) & agreen & danum & dachan & daname & agreen & daoname & daperm & awhite & Chr(186) & Chr(10)
@@ -1549,7 +1584,9 @@ For X = 0 To MMChat.Winsock.UBound
         If X <> Index Then
             If LCase(datag) = "no auth" Then
                 If users(Index).pass <> "" Then
+                    ''doevents
                     chatper Index, "You have 15 seconds to chat your password to me."
+                    ''doevents
                     pending.AddItem Index & "~" & Fix(Timer)
                     MMChat.Winsock(Index).Tag = "need pw"
                     Exit Function
@@ -1573,14 +1610,14 @@ users(Index).name = Mid(users(Index).name, 1, Len(users(Index).name) - 1)
 
 
 MMChat.Winsock(Index).Tag = "auth"
+timeout 0.2
 
 Winsock(Index).SendData Chr(19) & "MMChat by Dirocus.  " & sysversion & Chr(255)
-chatper Index, Chr(10) & welcome & Chr(10)
+chatper Index, Chr(10) & welcome & Chr(10) & Chr(10) & areset & abold & ared & "MMChat by Dirocus.  " & sysversion & Chr(10)
 
-chatall 0, users(Index).name & " Has connected to the server [" & datag & "]" & Chr(10)
+'chatall 0, users(Index).name & " Has connected to the server [" & datag & "]" & Chr(10)
 updateonline
-Call cjoin("Main", Index)
-If authnum = "0000" Then chatall 0, "UNREGISTERED VERSION, CONTACT DIROCUS FOR FULL VERSION INFORMATION"
+Call cjoin("Main", Index, datag)
 
 For temp = 1 To 50
     If Now > gaglist(temp, 1) Then
@@ -1593,45 +1630,40 @@ For temp = 1 To 50
     End If
 Next temp
 End Function
-Function cjoin(channel, Index As Integer)
+Function cjoin(channel, Index As Integer, Optional datag)
 channel = LCase(channel)
 If users(Index).channel = -1 Then
-    If Text3 <> "" Then
-        chatper Index, "Please enter password..."
-        
-        pending.AddItem Index & "~" & Fix(Timer)
-        Exit Function
-    End If
     users(Index).channel = 0
-    cchatall Index, users(Index).name & " Has Joined channel " & channels(0).name
+    cchatall 0, users(Index).name & " Has Joined channel " & channels(0).name & " (Connect:" & datag & ")"
     Exit Function
 End If
+oldchan = users(Index).channel
 If LCase(channels(users(Index).channel).name) = LCase(channel) Then
     chatper Index, "Umm.. Your already there..." & Chr(10)
     Exit Function
 End If
 For loca = 0 To UBound(channels)
     If LCase(channel) = LCase(channels(loca).name) Then
-        cchatall Index, users(Index).name & " Has Left channel " & channels(users(Index).channel).name & Chr(10)
-        
-        
+        cchatall Index, users(Index).name & " Has Left channel " & channels(users(Index).channel).name & " (TO:" & channels(loca).name & ")"
+        users(Index).channel = loca
+        cchatall Index, users(Index).name & " Has Joined channel " & channels(loca).name & " (FROM:" & channels(oldchan).name & ")"
+        chatper Index, "You have joined channel " & channels(loca).name & " (FROM:" & channels(oldchan).name & ")"
         Dim isempty As Boolean
         isempty = True
         For pos = 0 To UBound(users)
-            If users(pos).channel = users(Index).channel And pos <> Index Then
+            If users(pos).channel = oldchan And pos <> Index Then
                 If isloaded(Winsock, pos) = True Then isempty = False
             End If
         Next pos
-        If users(Index).channel = 0 Then isempty = False
+        If oldchan = 0 Then isempty = False
         If isempty = True Then
             
-            chatall 0, "The Channel [" & channels(users(Index).channel).name & "] has been removed" & Chr(10)
-            channels(users(Index).channel).name = ""
+            chatall 0, "The Channel [" & channels(oldchan).name & "] has been removed" & Chr(10)
+            channels(oldchan).name = ""
         
         End If
-        users(Index).channel = loca
-        cchatall Index, users(Index).name & " Has Joined channel " & channels(loca).name
-        chatper Index, "You have joined channel " & channels(loca).name
+        
+        
         Exit Function
     
     End If
@@ -1660,7 +1692,7 @@ If isloaded(Winsock, loopcount) = True Then
     If MMChat.Winsock(loopcount).Tag = "auth" Then
         If Index <> loopcount Then
             chatper loopcount, dadata
-            'doevents
+            '''doevents
         End If
     End If
 End If
@@ -1717,13 +1749,13 @@ If Index <> 0 Then
     If InStr(LCase(stripansi(dadata)), LCase(users(Index).name)) > 3 Or InStr(LCase(stripansi(dadata)), LCase(users(Index).name)) = 0 Then
         If Check3.Value = 0 Then Exit Function
         norname = 1
-        For a = 2 To 5
-            If Asc(Mid(dadata, a, 1)) < 97 Or Asc(Mid(dadata, a, 1)) > 122 Then
-                If Asc(Mid(dadata, a, 1)) < 65 Or Asc(Mid(dadata, a, 1)) > 90 Then
+        For A = 2 To 5
+            If Asc(Mid(dadata, A, 1)) < 97 Or Asc(Mid(dadata, A, 1)) > 122 Then
+                If Asc(Mid(dadata, A, 1)) < 65 Or Asc(Mid(dadata, A, 1)) > 90 Then
                     norname = 0
                 End If
             End If
-        Next a
+        Next A
         If norname = 0 Then
             dadata = Mid(dadata, 8, Len(dadata))
         End If
@@ -1745,7 +1777,7 @@ If isloaded(Winsock, loopcount) = True And loopcount <> Index Then
     End If
 End If
 Next loopcount
-'doevents
+'''doevents
 
 dadata = Replace(dadata, " chats to everybody, ", ": ")
 dadata = Replace(dadata, Chr(10), "")
@@ -1805,10 +1837,10 @@ If per > 100 Then
     For temp = 1 To 50
     If gaglist(temp, 1) = vbNull Then Exit For
     Next temp
-    gaglist(temp, 1) = Now + TimeSerial(0, Text6, 0)
+    gaglist(temp, 1) = Now + TimeSerial(0, Val(Text6), 0)
     gaglist(temp, 2) = Winsock(Index).RemoteHostIP
-    users(Index).gaggedtime = Now + TimeSerial(0, Text6, 0)
-    cchatall 0, users(Index).name & " Auto-Gagged by System " & Text6 & " Min" & Chr(10)
+    users(Index).gaggedtime = Now + TimeSerial(0, Val(Text6), 0)
+    chatall 0, users(Index).name & " Auto-Gagged by System " & Text6 & " Min" & Chr(10)
     gag = True
     Exit Function
 End If
@@ -1843,16 +1875,16 @@ Open App.Path & "\log.log" For Output As Filenum
 Print #Filenum, dafilecon
 Close Filenum
 Winsock(0).CloseSocket
-For a = 1 To Winsock.UBound
-If isloaded(Winsock, a) Then
-    If isloaded(Winsock, a) = True Then
+For A = 1 To Winsock.UBound
+If isloaded(Winsock, A) Then
+    If isloaded(Winsock, A) = True Then
         
-        Winsock_onClose (a)
+        Winsock_onClose (A)
         timeout 0.2
-        Unload Winsock(a)
+        Unload Winsock(A)
     End If
 End If
-Next a
+Next A
 timeout 0.2
 End
 End Sub
@@ -1882,14 +1914,16 @@ MMChat.Enabled = False
 MMChat.Show
 MMChat.Caption = "Loading"
 If App.EXEName = "mmchat.new" Then
-    timeout 10
+    timeout 6
     Kill App.Path & "\mmchat.exe"
     Name App.Path & "\mmchat.prg" As App.Path & "\mmchat.exe"
     Shell App.Path & "\mmchat.exe", vbNormalFocus
+    timeout 1
     End
 End If
-timeout 1
+
 If Dir(App.Path & "\mmchat.new.exe", vbNormal) <> "" Then
+    timeout 6
     Kill App.Path & "\mmchat.new.exe"
 End If
 
@@ -1897,7 +1931,6 @@ End If
 MMChat.Enabled = False
 MMChat.Show
 MMChat.Caption = "Loading"
-timeout (Rnd() * 2) + 1
 sysuptime = Date & " " & Time
 sysversion = "Version:" & App.Major & "." & App.Minor & "." & App.Revision
 
@@ -1927,70 +1960,12 @@ Next aaa
 
 loadsettings
 
-
-Randomize
-rand = Fix(Rnd() * 9990) + 5
-rand2 = Fix(Rnd() * 9990) + 5
-strtosend = Val(Mid(authnum, 1, 2)) * rand & "," & Val(Mid(authnum, 3, 2)) * rand2 & "," & Text2 & "," & sysversion
-
-'to force demo mode
-'authnum = "0000"
-
-
-If authnum = "0000" Then strtosend = "DEMO," & sysversion
-Winsock(0).Tag = ""
-Winsock(0).LocalPort = Fix(Rnd() * 500) + 3000
-
-
-'bypass auth
-'GoTo bypassit
-
-
-Winsock(0).Connect authserv, 4060
-
-
-X = Timer
-Do: 'doevents
-timeout 0.2
-Loop While X + 10 > Timer And Winsock(0).State <> 7
-If Winsock(0).State <> 7 Then
-    MsgBox "FAILED TO CONTACT LICESE SERVER, CONTACT DIROCUS"
-    End
-End If
-Winsock(0).SendData strtosend
-
-
-X = Timer
-Do: 'doevents
-timeout 2
-Loop While X + 10 > Timer And Winsock(0).Tag = ""
-If Winsock(0).Tag = "" Then
-    MsgBox "LICENSE SERVER DID NOT RESPOND, CONTACT DIROCUS"
-    End
-End If
-If InStr(Winsock(0).Tag, "http") = 1 Then
-    
-    Call Load(Form2)
-    MMChat.Caption = "Updating... please wait..."
+checkupdate
+If Winsock(0).Tag = "exit" Then
+    Form1.Visible = False
     Exit Sub
 End If
-If authnum = "0000" Then
-    If Winsock(0).Tag <> "OK" Then
-        MsgBox "Demo use rejected"
-        End
-    End If
-Else
-    If Winsock(0).Tag <> Str(rand + rand2 + authnum) Then
-        X = Winsock(0).Tag
-        MsgBox "LICENSE FAILUER, CONTACT DIROCUS"
-        End
-    End If
-End If
-Winsock(0).CloseSocket
-Do: DoEvents
-Loop While Winsock(0).State <> sckClosed
-bypassit:
-'
+init = True
 
 ReDim plugins(0)
 MMChat.Caption = "Searching for Plugins"
@@ -1999,9 +1974,10 @@ rreps_Click
 
 '
 Winsock(0).Tag = ""
+Winsock(0).CloseSocket
 Winsock(0).LocalPort = Val(Text2)
 
-MMChat.Caption = "MMChat by Dirocus - " & sysversion
+MMChat.Caption = "MMChat " & Text1 & " by Dirocus - " & sysversion
 MMChat.Enabled = True
 
 'initilize
@@ -2026,7 +2002,7 @@ channels(0).authmode = "none"
 channels(0).name = "Main"
 channels(0).sil = False
 
-'doevents
+'''doevents
 
 Winsock(0).Listen
 procplugin = False
@@ -2036,16 +2012,17 @@ Private Sub loadsettings()
 Check1.Value = GetFromINI("Main", "Auth", "0", App.Path & "\mmchat.ini")
 Text1 = GetFromINI("Main", "Chatname", "ChatServ", App.Path & "\mmchat.ini")
 authserv = GetFromINI("Main", "Authserver", "ns1.mmchat.example.org", App.Path & "\mmchat.ini")
-authnum = GetFromINI("Main", "Authnum", "0000", App.Path & "\mmchat.ini")
 Text2 = GetFromINI("Main", "Port", "4050", App.Path & "\mmchat.ini")
 welcome = Replace(GetFromINI("Main", "Welcome", "'Welcome to MMChat by Dirocus/nChat to the server 'help' for usage information'", App.Path & "\mmchat.ini"), "/n", Chr(10))
 Check3.Value = GetFromINI("Main", "asin", "1", App.Path & "\mmchat.ini")
 Check4.Value = GetFromINI("Main", "asout", "1", App.Path & "\mmchat.ini")
-Text3 = GetFromINI("Main", "Mainpw", "", App.Path & "\mmchat.ini")
+
 Text4 = GetFromINI("Main", "gagi", "1", App.Path & "\mmchat.ini")
 Text5 = GetFromINI("Main", "gagp", "8", App.Path & "\mmchat.ini")
 Text6 = GetFromINI("Main", "gagt", ".5", App.Path & "\mmchat.ini")
 Check2.Value = GetFromINI("Main", "spamon", "1", App.Path & "\mmchat.ini")
+authhost = GetFromINI("main", "host", vbNullString, App.Path & "\mmchat.ini")
+
 
 commands(1).name = "auth"
 commands(1).nparams = 0
@@ -2259,33 +2236,18 @@ End Sub
 
 Private Sub Timer1_Timer()
 
-For a = 0 To pending.ListCount - 1
-    datime = Mid(pending.List(a), InStr(pending.List(a), "~") + 1, Len(pending.List(a)))
+For A = 0 To pending.ListCount - 1
+    datime = Mid(pending.List(A), InStr(pending.List(A), "~") + 1, Len(pending.List(A)))
     If Val(datime) < Timer - 15 Or Val(datime) > Timer Then
-        Index = Mid(pending.List(a), 1, InStr(pending.List(a), "~") - 1)
+        Index = Mid(pending.List(A), 1, InStr(pending.List(A), "~") - 1)
         chatper Index, "Timeout.."
         timeout 0.1
         Winsock_onClose (Index)
         Exit For
     End If
-Next a
+Next A
 mins = Mid(Time, InStr(Time, ":") + 1, 5)
-If mins = "00:00" Or mins = "30:00" Then
-    If authnum = "0000" Then
-        chatall 0, Chr(10) & "UNREGISTERED VERSION, CONTACT DIROCUS FOR FULL VERSION INFORMATION"
-        timeout 1
-        chatall 0, Chr(10) & "UNREGISTERED VERSION, CONTACT DIROCUS FOR FULL VERSION INFORMATION"
-        timeout 1
-        chatall 0, Chr(10) & "UNREGISTERED VERSION, CONTACT DIROCUS FOR FULL VERSION INFORMATION"
-        If Fix(Rnd() * 5) = 3 Then
-            For temp = 1 To Winsock.UBound
-                
-                Winsock_onClose (temp)
-            Next temp
-            Exit Sub
-        End If
-    End If
-End If
+
 mins = Mid(Time, InStr(Time, ":") + 4, 2)
 If mins = "00" Or mins = "30" Then
 
@@ -2299,15 +2261,20 @@ If mins = "00" Or mins = "30" Then
     End If
 
 
-
+Dim temp As Integer
     For temp = 1 To Winsock.UBound
         If isloaded(Winsock, temp) = True Then
             If Winsock(temp).Tag = "auth" Then
-                X = Winsock(temp).State
                 Winsock(temp).SendData Chr(ping) & Timer & Chr(endcom)
                 
+                'idle code
+                If users(temp).idletime + TimeSerial(0, 30, 0) < Now Then
+                    
+                    users(temp).idle = True
+                    
+                End If
                 
-                'doevents
+                '
             End If
         End If
     Next temp
@@ -2326,25 +2293,26 @@ If Index = 0 Then
     MsgBox "Listing socket failed.  Port already in use."
     Exit Sub
 End If
-a = 0
+A = 0
 Do
-If a < pending.ListCount Then
-    If Mid(pending.List(a), 1, InStr(pending.List(a), "~") - 1) = Index Then
-        pending.RemoveItem a
-        a = a - 1
+If A < pending.ListCount Then
+    If Mid(pending.List(A), 1, InStr(pending.List(A), "~") - 1) = Index Then
+        pending.RemoveItem A
+        A = A - 1
     End If
 Else
     Exit Do
 End If
-a = a + 1
+A = A + 1
 Loop
 
-If isloaded(Winsock, Index) = False Then Exit Sub
+If isloaded(Winsock, Index) = True Then
 
 indextag = Winsock(Index).Tag
 
 Winsock(Index).CloseSocket
 Unload Winsock(Index)
+End If
 updateonline
 If indextag = "auth" Then
     chatall 0, users(Index).name & " has left the server."
@@ -2373,10 +2341,11 @@ Dim isempty As Boolean
         channels(users(Index).channel).name = ""
     End If
 End If
-clearusers (sock)
+clearusers (Index)
 End Sub
 Private Sub Winsock_onConnectionRequest(Index As Integer, ByVal requestId As Long)
 Dim sock As Integer
+Winsock(0).CloseSocket
 For sock = 1 To Winsock.UBound + 1
 If isloaded(Winsock, sock) = False Then Exit For
 Next sock
@@ -2388,7 +2357,8 @@ Winsock(sock).Tag = "connect"
 clearusers (sock)
 timeout 0.1
 Winsock(sock).Accept requestId
-DoEvents
+timeout 0.1
+Winsock(0).Listen
 End Sub
 Sub clearusers(sock)
 users(sock).cip = ""
@@ -2405,7 +2375,7 @@ users(sock).ver = ""
 users(sock).channel = -1
 users(sock).gaggedtime = 0
 users(sock).gtimer = Timer
-users(sock).sending = False
+users(sock).idle = False
 'any future ones here
 ReDim users(sock).log(0)
 End Sub
@@ -2414,6 +2384,6 @@ Winsock_onClose (Index)
 End Sub
 Private Sub winsock_OnSendComplete(Index As Integer)
 If Index = 0 Then Exit Sub
-DoEvents
-users(Index).sending = False
+''doevents
+'users(Index).sending = False
 End Sub
