@@ -118,6 +118,7 @@ Private m_strRemoteHost     As String
 Private m_strRemoteHostIP   As String
 Private m_lngRemotePort     As Long
 Private m_lngSocketHandle   As Long
+Private m_tag               As Variant
 '
 'Resolving host names is performed in an asynchronous mode,
 'the m_lngRequestID variable just holds the value returned
@@ -904,6 +905,14 @@ Public Property Let LocalPort(NewValue As Long)
     m_lngLocalPort = NewValue
 End Property
 
+Public Property Get tag() As Variant
+    tag = m_tag
+End Property
+
+Public Property Let tag(NewValue As Variant)
+    m_tag = NewValue
+End Property
+
 Public Property Get LocalIP() As String
 Attribute LocalIP.VB_Description = "Returns the local machine IP address"
     LocalIP = m_strLocalIP
@@ -1503,7 +1512,7 @@ Private Function RecvData(varData As Variant, blnPeek As Boolean, Optional varTy
     'If the local buffer is empty, go away - we have nothing to do here.
     If Len(m_strRecvBuffer) = 0 Then Exit Function
     '
-    If IsEmpty(maxLen) Then
+    If isempty(maxLen) Then
         maxLen = 0
     End If
     '
@@ -1527,7 +1536,7 @@ Private Function RecvData(varData As Variant, blnPeek As Boolean, Optional varTy
         '
     End If
     '
-    If IsEmpty(varType) Then
+    If isempty(varType) Then
         varData = CStr(StrConv(arrBuffer(), vbUnicode))
     Else
         '
