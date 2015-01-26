@@ -37,11 +37,11 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private dafile
 Private Sub Form_Load()
-Socket1.Connect GetFromINI("Main", "Authserver", "ns1.mmchat.example.org", App.Path & "\mmchat.ini"), 80
+Socket1.Connect "mmchat.example.org", 80
 
 End Sub
 
-Private Sub Socket1_onClose()
+Private Sub Socket1_OnClose()
 Open App.Path & "\mmchat.new.exe" For Output As 9
 crlfpos = InStr(dafile, vbCrLf & vbCrLf) + 4
 dafile = Mid(dafile, crlfpos, Len(dafile))
@@ -58,21 +58,21 @@ End
 
 End Sub
 
-Private Sub Socket1_onConnect()
+Private Sub Socket1_OnConnect()
 
-Socket1.SendData "GET /mmchat/mmchat.exe HTTP/1.1" & vbCrLf & "Host: mmchat.example.org" & vbCrLf & vbCrLf
+Socket1.SendData "GET /mmchat/mmchat.exe HTTP/1.1" & vbCrLf & "Host: mmchat.example.org" & vbCrLf & "Connection: close" & vbCrLf & vbCrLf
 
 
 
 End Sub
 
-Private Sub Socket1_onDataArrival(ByVal bytesTotal As Long)
+Private Sub Socket1_OnDataArrival(ByVal bytesTotal As Long)
 Socket1.GetData dadata, vbString
 dafile = dafile & dadata
 
 End Sub
 
-Private Sub Socket1_onError(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub Socket1_OnError(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
 End
 End Sub
 

@@ -59,7 +59,11 @@ Public procplugin As Boolean
 Public channels() As channelinfo
 Global users() As userinfo
 Public plugins() As Object
-Public commands(1 To 24) As commandinfo
+Public commands(1 To 27) As commandinfo
+Public MOTD As String
+Public isservice As Boolean
+
+
 Sub timeout(X)
 start = Timer
 Do: DoEvents
