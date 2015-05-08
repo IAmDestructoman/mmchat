@@ -1171,4 +1171,28 @@ Private Sub RemoveIfExists(ByVal strKey As String)
     m_colMemoryBlocks.Remove strKey
     '
 End Sub
+Public Function wsstate(a As Integer) As String
+Select Case a
+Case 0
+wsstate = "Closed"
+Case 1
+wsstate = "Open"
+Case 2
+wsstate = "Listening"
+Case 3
+wsstate = "Connection Pending"
+Case 4
+wsstate = "Resolving Host"
+Case 5
+wsstate = "Host Resolved"
+Case 6
+wsstate = "Connecting"
+Case 7
+wsstate = "Connected"
+Case 8
+wsstate = "Closing"
+Case 9
+wsstate = "Error"
+End Select
+End Function
 

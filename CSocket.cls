@@ -172,6 +172,7 @@ Public Event OnSendProgress(ByVal bytesSent As Long, ByVal bytesRemaining As Lon
 
 Public Sub SendData(varData As Variant)
 Attribute SendData.VB_Description = "Send data to remote computer"
+Debug.Print varData
     '
     'data to send - will be built from the varData argument
     Dim arrData()       As Byte
