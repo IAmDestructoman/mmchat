@@ -16,7 +16,8 @@ Development started around 1999, when the author was 14, on a 33.6k AOL dial-up 
 
 ### `v3.5.1` and `v3.5.1-dec` (November–December 2005)
 - **Networking:** moves off the Winsock control to Oleg Gdalevich's pure-API `CSocket` class (version 1.0.12, published free on vbip.com in 2002), wrapped in the `Socket.ctl` user control.
-- **Modified CSocket:** about a dozen `Err.Raise` calls in `SendData`, `PeekData`, `GetData`, `Listen` and `Connect` became `RaiseEvent OnError(...)`, so a socket failure reaches the server as an event instead of an unhandled error. `Option Explicit` was also switched off. A `wsstate()` helper and a `Debug.Print` were added in 2015.
+  - **Why:** the server was meant to run 24/7, and with the Microsoft Winsock control it would fail after a day or two of uptime with a generic Winsock error. Hours of running it inside the VB IDE, with break-on-error and line-by-line stepping, never traced the failure to MMChat's own code. The conclusion was that the control itself was at fault, so it had to go.
+- **Modified CSocket:** about a dozen `Err.Raise` calls in `SendData`, `PeekData`, `GetData`, `Listen` and `Connect` became `RaiseEvent OnError(...)`. A socket failure now reaches the server as an event and drops one connection, instead of raising an error that could stop an always-on server. `Option Explicit` was also switched off. A `wsstate()` helper and a `Debug.Print` were added in 2015.
 - **Admin GUI:** chat name and port fields, online and banned lists, packet counters, gag settings, serve in/out options and minimise-to-tray.
 - **Access control:** `banned.txt`; a server-wide "main password" step (new users wait in channel −1); a 15-second password timeout.
 - **Flood control:** a real `gag()` with auto-gag.
@@ -90,10 +91,17 @@ Fired up once more. The MOTD reads: *"Resurrection - 100s of hours of the worst 
 | message board | May 2006 | *"An almost exact replica of the Med Board"*: read, post, take. |
 | telnet | Jun 2006 | Listens on the chat port + 1 and acts as a MudMaster client for raw-telnet users (`.setn name`, `.chat`). |
 | Aim Notifier | Jul 2006 → Feb 2007 | Users register AIM screen names, and admins broadcast IMs. It logs into AIM over AOL's **TOC2** protocol, including the password-roasting and sign-on hash algorithms. |
-| Battleship | Jul 2006 → Sep 2006 | Full two-player Battleship over chat, *"inspired by OMA's Battleship."* |
+| Battleship | Jul 2006 → Sep 2006 | Full two-player Battleship over chat, *"inspired by OMA's Battleship"* (see below). |
 | connect4 | Jul 2006 | Connect Four, unfinished: the board is declared `As ibyte` (for `Byte`), so it never compiled and never shipped. |
 | fbfly | Sep 2013 | "Faeball Fly": converts a bearing and distance into east/west and north/south moves. |
 | holofinder | Nov 2013 → Aug 2014 | See below. |
+
+### Battleship and Oma's Battleship
+Oma's Battleship (September 1999) was a MudMaster *client* script, published with Oma's other scripts on [JGP1's MudMaster Scripts](https://www.jgp1.com/mudmaster/scripts.htm). Both players loaded it and played over a direct peer-to-peer chat. It used `bsplace`, `bsremove`, `bsshow`, `bsfire`, `bsreq`/`bsplay` and `bsGO`, with a fleet of aircraft carrier, battleship, cruiser, destroyer, submarine and PT boat.
+
+MMChat's plugin keeps the `bs` command style and the fleet (classes A, B, C, D, S, P), but moves the game into the server. The plugin holds both boards, so players need nothing installed. It also adds challenges, win/loss records and hit/sink announcements to both sides.
+
+The same page has Oma's **OmaSpy** (2001), a script that answered commands chatted to it (`/chat [name] help`): the hub-and-commands idea MMChat is built on, done as a client script.
 
 ### DarkNomads
 darknomads.com was a Medievia help site with autoquest and zone walkthroughs, riddle answers, catacomb locations, nearest clan towns and player-submitted logs. It also offered a C++ MudMaster 2000 client DLL (not part of this project) with the same lookups.
@@ -107,6 +115,12 @@ Medievia published a live world-map GIF (`www.medievia.com/images/livemaps/livem
 2. **Scans the 2000×2000 pixel grid** for "holo" markers: a pixel of colour index 4 with exactly three orthogonal neighbours of the same colour and no diagonal ones.
 3. **Measures the Manhattan distance** to the nearest road pixel (magenta) within 5 pixels.
 4. **Diffs against the previous scan** and broadcasts new holos to the chat in ANSI colour, as age in minutes plus fly directions from the map centre ("NEW(E54 N45) Road:3"). Entries expire after 4 hours.
+
+**How accurate it was:** the shape test catches every holo, but a T-junction in one of the map's 1-pixel cyan river lines has the same signature. The diff in step 4 filters most of those out. Rivers and roads never move, so every static junction lands in the first scan's baseline and is never announced. Occasional false positives still got through.
+
+**The known trade-off:** holos already on the map when the plugin starts also go into that baseline, so they aren't announced until they disappear and come back. Since the server was built to run 24/7, that was accepted.
+
+**Revisited in 2026:** Medievia still serves `livemapinfo.gif` (a 2000×2000 GIF87a, unchanged since March 2024). The same rules find 32 matches on it, all of them static river junctions. Among them is pixel 1539,549 (E54 N45), the coordinate in the commented-out sample lines of `sendupdate()`.
 
 It was slow, because it handles bits as strings of `"0"`/`"1"`, rebuilds the LZW table with `ReDim Preserve` and calls `DoEvents` per code. But it worked. `Plugins/holofinder/gif/` is the earlier standalone version, which logged into the chat server as client "Holofind". Its original build didn't survive; the `gif.exe` there was compiled from the 2013 source with VB6 in 2026, unchanged. Turning it into a plugin is why the server gained the `Timer()` hook.
 
