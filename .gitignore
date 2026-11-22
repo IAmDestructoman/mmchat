@@ -1,0 +1,15 @@
+# Runtime data written by the server and plugins
+users/*.usr
+!users/sysop.usr
+messages/
+*.log
+Plugins/aim.ini
+
+# VB6 per-user workspace files and build intermediates
+*.vbw
+*.scc
+*.obj
+*.exp
+*.lib
+*.pdm
+*.oca
